@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🚗 Veículos Kids</title>
+
+<style>
+/* =====================================================
+   CONFIGURAÇÃO GERAL
+===================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #4dabf7, #339af0, #1971c2);
+    padding: 5px;
+}
+
+/* =====================================================
+   APLICAÇÃO
+===================================================== */
+.app {
+    position: relative; /* Adicionado para fixar o botão de voltar */
+    width: 100%;
+    height: 100%;
+    max-width: 1100px;
+    margin: auto;
+    background: rgba(255,255,255,.97);
+    border-radius: 22px;
+    padding: 10px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.25);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* =====================================================
+   BOTÃO SLIDER "DESLIZE PARA VOLTAR"
+===================================================== */
+.slider-voltar-container {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 1000;
+    width: 145px;
+    height: 36px;
+    background: rgba(0, 0, 0, 0.12);
+    border: 2px solid rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    touch-action: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+.slider-voltar-texto {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+    color: #333;
+    pointer-events: none;
+    padding-left: 22px;
+}
+
+.slider-voltar-botao {
+    width: 28px;
+    height: 28px;
+    background: #1971c2;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: grab;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+    position: relative;
+    z-index: 2;
+    touch-action: none;
+}
+
+.slider-voltar-botao:active {
+    cursor: grabbing;
+    filter: brightness(0.9);
+}
+
+/* =====================================================
+   CABEÇALHO
+===================================================== */
+header {
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.personagem {
+    font-size: clamp(30px, 6vw, 55px);
+    line-height: 1;
+    animation: balancar 1.5s infinite;
+}
+
+@keyframes balancar {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+}
+
+h1 {
+    font-size: clamp(25px, 5vw, 42px);
+    color: #1971c2;
+    line-height: 1.1;
+}
+
+.subtitulo {
+    margin-top: 3px;
+    color: #666;
+    font-size: clamp(12px, 2.5vw, 17px);
+}
+
+/* =====================================================
+   MENSAGEM
+===================================================== */
+.mensagem {
+    width: 100%;
+    min-height: 43px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #d0ebff;
+    border-radius: 14px;
+    font-size: clamp(16px, 4vw, 25px);
+    font-weight: bold;
+    text-align: center;
+    padding: 5px;
+    margin: 8px 0;
+    flex-shrink: 0;
+}
+
+/* =====================================================
+   GRADE DOS VEÍCULOS
+===================================================== */
+.veiculos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 7px;
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+}
+
+/* =====================================================
+   BOTÃO DO VEÍCULO
+===================================================== */
+.veiculo {
+    border: none;
+    min-height: 0;
+    width: 100%;
+    border-radius: 17px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    transition: transform .1s, box-shadow .1s;
+    box-shadow: 0 4px 0 rgba(0,0,0,.18);
+    touch-action: manipulation;
+    overflow: hidden;
+}
+
+.veiculo:active,
+.veiculo.animando {
+    transform: translateY(4px) scale(.96);
+    box-shadow: none;
+}
+
+/* =====================================================
+   EMOJI E TEXTOS
+===================================================== */
+.emoji {
+    font-size: clamp(35px, 7vw, 65px);
+    line-height: 1;
+    transition: transform .15s;
+}
+
+.veiculo:active .emoji {
+    transform: scale(1.1);
+}
+
+.nome {
+    margin-top: 4px;
+    font-size: clamp(11px, 2.2vw, 19px);
+    font-weight: bold;
+    color: #333;
+    line-height: 1;
+}
+
+.som {
+    margin-top: 3px;
+    font-size: clamp(9px, 1.8vw, 14px);
+    color: #555;
+    line-height: 1;
+}
+
+.icone-som {
+    position: absolute;
+    top: 4px;
+    right: 5px;
+    font-size: clamp(12px, 2vw, 20px);
+}
+
+/* =====================================================
+   CORES DOS VEÍCULOS
+===================================================== */
+.carro { background: #ffc9c9; }
+.foguete { background: #fff3bf; }
+.onibus { background: #a5d8ff; }
+.policia { background: #d0ebff; }
+.ambulancia { background: #ffe3e3; }
+.bombeiro { background: #ffb3b3; }
+.caminhao { background: #ffd8a8; }
+.trator { background: #d8f5a2; }
+.moto { background: #ced4da; }
+.trem { background: #e7d5ff; }
+.aviao { background: #d0ebff; }
+.helicoptero { background: #b2f2bb; }
+
+/* =====================================================
+   AVISO, CONTROLES E INSTRUÇÃO
+===================================================== */
+.aviso {
+    display: none;
+    margin-top: 5px;
+    padding: 7px;
+    border-radius: 10px;
+    background: #ffe3e3;
+    color: #c92a2a;
+    text-align: center;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.controles {
+    display: flex;
+    justify-content: center;
+    margin-top: 7px;
+    flex-shrink: 0;
+}
+
+.btn-parar {
+    border: none;
+    border-radius: 12px;
+    min-height: 42px;
+    padding: 6px 35px;
+    color: white;
+    background: #fa5252;
+    font-size: clamp(12px, 2.2vw, 17px);
+    font-weight: bold;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.btn-parar:active {
+    transform: scale(.96);
+}
+
+.instrucao {
+    margin-top: 5px;
+    padding: 5px;
+    background: #f1f3f5;
+    border-radius: 10px;
+    color: #555;
+    text-align: center;
+    font-size: clamp(9px, 1.8vw, 13px);
+    line-height: 1.2;
+    flex-shrink: 0;
+}
+
+/* =====================================================
+   RESPONSIVIDADE
+===================================================== */
+@media(max-width: 700px) {
+    body { padding: 3px; }
+    .app { padding: 7px; border-radius: 17px; }
+    .slider-voltar-container { width: 115px; height: 30px; top: 5px; left: 5px; }
+    .slider-voltar-texto { font-size: 8px; padding-left: 16px; }
+    .slider-voltar-botao { width: 22px; height: 22px; font-size: 10px; }
+    .personagem { font-size: 32px; }
+    h1 { font-size: 26px; }
+    .subtitulo { font-size: 11px; }
+    .mensagem { min-height: 39px; margin: 5px 0; font-size: 16px; border-radius: 11px; }
+    .veiculos { grid-template-columns: repeat(4, 1fr); gap: 5px; }
+    .veiculo { border-radius: 12px; box-shadow: 0 3px 0 rgba(0,0,0,.18); }
+    .emoji { font-size: 38px; }
+    .nome { font-size: 11px; }
+    .som { display: none; }
+    .icone-som { font-size: 13px; top: 3px; right: 4px; }
+    .controles { margin-top: 5px; }
+    .btn-parar { min-height: 37px; padding: 5px 30px; font-size: 11px; border-radius: 10px; }
+    .instrucao { font-size: 9px; margin-top: 4px; padding: 4px; }
+}
+
+@media(max-width: 430px) {
+    .personagem { font-size: 27px; }
+    h1 { font-size: 23px; }
+    .subtitulo { font-size: 10px; }
+    .mensagem { min-height: 35px; font-size: 14px; }
+    .veiculos { gap: 4px; }
+    .emoji { font-size: 32px; }
+    .nome { font-size: 9px; }
+    .icone-som { font-size: 11px; }
+    .btn-parar { min-height: 34px; font-size: 10px; }
+    .instrucao { font-size: 8px; padding: 3px; }
+}
+
+@media(max-height: 500px) and (orientation: landscape) {
+    .personagem { display: none; }
+    h1 { font-size: 22px; }
+    .subtitulo { display: none; }
+    .mensagem { min-height: 30px; margin-bottom: 3px; }
+    .veiculo { border-radius: 10px; }
+    .emoji { font-size: 30px; }
+    .nome { font-size: 9px; }
+    .controles { margin-top: 3px; }
+    .btn-parar { min-height: 30px; }
+    .instrucao { display: none; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- ==================================================
+     BOTÃO SLIDER DESLIZE PARA VOLTAR
+=================================================== -->
+<div class="slider-voltar-container" id="sliderPista">
+    <span class="slider-voltar-texto">➡️ Deslize p/ Voltar</span>
+    <div class="slider-voltar-botao" id="sliderBotao">
+        ⬅️
+    </div>
+</div>
+
+<!-- ==================================================
+     CABEÇALHO
+=================================================== -->
+<header>
+    <div class="personagem">👦🚗</div>
+    <h1>🚗 Veículos Kids</h1>
+    <div class="subtitulo">Toque nos veículos e descubra seus sons!</div>
+</header>
+
+<!-- ==================================================
+     MENSAGEM
+=================================================== -->
+<div class="mensagem" id="mensagem">
+    👆 Toque em um veículo!
+</div>
+
+<!-- ==================================================
+     VEÍCULOS
+=================================================== -->
+<div class="veiculos">
+
+<button class="veiculo carro" data-veiculo="Carro" data-audio="carro.mp3" onclick="tocarVeiculo(this)">
+    <span class="icone-som">🔊</span>
+    <div class="emoji">🚗</div>
+    <div class="nome">Carro</div>
+    <div class="som">Vrum vrum!</div>
+</button>
+
+<button class="veiculo foguete" data-veiculo="Foguete" data-audio="foguete.mp3" onclick="tocarVeiculo(this)">
+    <span class="icone-som">🔊</span>
+    <div class="emoji">🚀</div>
+    <div class="nome">Foguete</div>
+    <div class="som">Bii bii!</div>
+</button>
+
+<button class="veiculo onibus" data-veiculo="Ônibus" data-audio="onibus.mp3" onclick="tocarVeiculo(this)">
+    <span class="icone-som">🔊</span>
+    <div class="emoji">🚌</div>
+    <div class="nome">Ônibus</div>
+    <div class="som">Fuuum!</div>
+</button>
+
+<button class="veiculo policia" data-veiculo="Polícia" data-audio="policia.mp3" onclick="tocarVeiculo(this)">
+    <span class="icone-som">🔊</span>
+    <div class="emoji">🚓</div>
+    <div class="nome">Polícia</div>
+    <div class="som">Uííí!</div>
+</button>
+
+<button class="veiculo ambulancia" data-veiculo="Ambulância" data-audio="ambulancia.mp3" onclick="tocarVeiculo(this)">
+    <span class="icone-som">🔊</span>
+    <div class="emoji">🚑</div>
+    <div class="nome">Ambulância</div>
+    <div class="som">Sirene!</div>
+</button>
+
+<button class="veiculo bombeiro" data-veiculo="Caminhão de Bombeiros" data-audio="bombeiro.mp3" onclick="tocarVeiculo(this)">
+    <span class="icone-som">🔊</span>
+    <div class="emoji">🚒</div>
+    <div class="nome">Bombeiro</div>
+    <div class="som">Uóóó!</div>
+</button>
+
+<button class="veiculo caminhao" data-veiculo="Caminhão" data-audio="caminhao.mp3" onclick="tocarVeiculo(this)">
+    <span class="icone-som">🔊</span>
+    <div class="emoji">🚚</div>
+    <div class="nome">Caminhão</div>
+    <div class="som">Brummm!</div>
+</button>
+
+<button class="veiculo trator" data-veiculo="Trator" data-audio="trator.mp3" onclick="tocarVeiculo(this)">
+    <span class="icone-som">🔊</span>
+    <div class="emoji">🚜</div>
+    <div class="nome">Trator</div>
+    <div class="som">Brum brum!</div>
+</button>
+
+<button class="veiculo moto" data-veiculo="Moto" data-audio="moto.mp3" onclick="tocarVeiculo(this)">
+    <span class="icone-som">🔊</span>
+    <div class="emoji">🏍️</div>
+    <div class="nome">Moto</div>
+    <div class="som">Vruuum!</div>
+</button>
+
+<button class="veiculo trem" data-veiculo="Trem" data-audio="trem.mp3" onclick="tocarVeiculo(this)">
+    <span class="icone-som">🔊</span>
+    <div class="emoji">🚂</div>
+    <div class="nome">Trem</div>
+    <div class="som">Piuííí!</div>
+</button>
+
+<button class="veiculo aviao" data-veiculo="Avião" data-audio="aviao.mp3" onclick="tocarVeiculo(this)">
+    <span class="icone-som">🔊</span>
+    <div class="emoji">✈️</div>
+    <div class="nome">Avião</div>
+    <div class="som">Vuuuu!</div>
+</button>
+
+<button class="veiculo helicoptero" data-veiculo="Helicóptero" data-audio="helicoptero.mp3" onclick="tocarVeiculo(this)">
+    <span class="icone-som">🔊</span>
+    <div class="emoji">🚁</div>
+    <div class="nome">Helicóptero</div>
+    <div class="som">Téc téc!</div>
+</button>
+
+</div>
+
+<!-- ==================================================
+     AVISO
+=================================================== -->
+<div class="aviso" id="aviso">
+    ⚠️ Arquivo de áudio não encontrado.
+</div>
+
+<!-- ==================================================
+     BOTÃO PARAR
+=================================================== -->
+<div class="controles">
+    <button class="btn-parar" onclick="pararSom()">
+        🛑 Parar som
+    </button>
+</div>
+
+<!-- ==================================================
+     INSTRUÇÃO
+=================================================== -->
+<div class="instrucao">
+    📱 Toque em um veículo para ouvir seu som!
+</div>
+
+</div>
+
+<script>
+/* =====================================================
+   CONFIGURAÇÃO DOS SONS
+===================================================== */
+const pastaSons = "sons/veiculos/";
+let somAtual = null;
+
+/* =====================================================
+   TOCAR VEÍCULO
+===================================================== */
+function tocarVeiculo(veiculo) {
+    pararSom();
+    const arquivo = veiculo.dataset.audio;
+    const caminho = pastaSons + arquivo;
+    
+    somAtual = new Audio(caminho);
+    somAtual.volume = 1;
+
+    somAtual.play().catch(() => {
+        mostrarAvisoAudio();
+    });
+
+    veiculo.classList.add("animando");
+    setTimeout(() => {
+        veiculo.classList.remove("animando");
+    }, 300);
+
+    document.getElementById("mensagem").innerHTML =
+        veiculo.querySelector(".emoji").textContent +
+        " " +
+        veiculo.dataset.veiculo;
+}
+
+/* =====================================================
+   PARAR SOM
+===================================================== */
+function pararSom() {
+    if (somAtual) {
+        somAtual.pause();
+        somAtual.currentTime = 0;
+        somAtual = null;
+    }
+}
+
+/* =====================================================
+   AVISO
+===================================================== */
+function mostrarAvisoAudio() {
+    const aviso = document.getElementById("aviso");
+    aviso.style.display = "block";
+    setTimeout(() => {
+        aviso.style.display = "none";
+    }, 3500);
+}
+
+/* =====================================================
+   LÓGICA DO SLIDER "DESLIZE PARA VOLTAR"
+===================================================== */
+function voltarPagina() {
+    if (typeof pararSom === "function") pararSom();
+
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        window.location.href = "index.html";
+    }
+}
+
+const sliderPista = document.getElementById("sliderPista");
+const sliderBotao = document.getElementById("sliderBotao");
+
+let isDragging = false;
+let startX = 0;
+let currentX = 0;
+
+if (sliderBotao && sliderPista) {
+    sliderBotao.addEventListener("pointerdown", function(e) {
+        isDragging = true;
+        startX = e.clientX - currentX;
+        sliderBotao.setPointerCapture(e.pointerId);
+        sliderBotao.style.transition = "none";
+    });
+
+    sliderBotao.addEventListener("pointermove", function(e) {
+        if (!isDragging) return;
+        const maxDrag = sliderPista.clientWidth - sliderBotao.clientWidth - 4;
+        let x = e.clientX - startX;
+        if (x < 0) x = 0;
+        if (x > maxDrag) x = maxDrag;
+        currentX = x;
+        sliderBotao.style.transform = `translateX(${currentX}px)`;
+    });
+
+    function finalizarArrasto(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        const maxDrag = sliderPista.clientWidth - sliderBotao.clientWidth - 4;
+
+        if (currentX >= maxDrag * 0.75) {
+            sliderBotao.style.transform = `translateX(${maxDrag}px)`;
+            voltarPagina();
+            setTimeout(() => {
+                sliderBotao.style.transition = "transform 0.3s ease";
+                sliderBotao.style.transform = "translateX(0px)";
+                currentX = 0;
+            }, 500);
+        } else {
+            sliderBotao.style.transition = "transform 0.3s ease";
+            sliderBotao.style.transform = "translateX(0px)";
+            currentX = 0;
+        }
+    }
+
+    sliderBotao.addEventListener("pointerup", finalizarArrasto);
+    sliderBotao.addEventListener("pointercancel", finalizarArrasto);
+}
+</script>
+
+</body>
+</html>

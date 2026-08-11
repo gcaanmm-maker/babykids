@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1.0,
+               maximum-scale=1.0,
+               user-scalable=no">
+
+<title>🥁 Bateria Kids</title>
+
+
+<style>
+
+/* =====================================================
+   CONFIGURAÇÕES GERAIS
+===================================================== */
+
+* {
+
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+html,
+body {
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+
+/* =====================================================
+   FUNDO
+===================================================== */
+
+body {
+
+    background:
+        linear-gradient(
+            135deg,
+            #7048e8,
+            #5f3dc4,
+            #3b2b8f
+        );
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 5px;
+}
+
+
+/* =====================================================
+   APLICATIVO
+===================================================== */
+
+.app {
+
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    max-width: 1200px;
+
+    background: white;
+
+    border-radius: 20px;
+
+    padding: 6px;
+
+    overflow: hidden;
+
+    display: flex;
+
+    flex-direction: column;
+
+    box-shadow:
+        0 8px 30px
+        rgba(0,0,0,.30);
+}
+
+
+/* =====================================================
+   BOTÃO SLIDER "DESLIZE PARA VOLTAR" (TOPO ESQUERDO)
+===================================================== */
+
+.slider-voltar-container {
+
+    position: absolute;
+
+    top: 8px;
+    left: 8px;
+
+    z-index: 100;
+
+    width: 145px;
+    height: 36px;
+
+    background: rgba(103, 65, 217, 0.15);
+
+    border: 2px solid #6741d9;
+
+    border-radius: 20px;
+
+    padding: 2px;
+
+    display: flex;
+
+    align-items: center;
+
+    touch-action: none;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+
+
+.slider-voltar-texto {
+
+    position: absolute;
+
+    width: 100%;
+
+    text-align: center;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    color: #4c2a9c;
+
+    pointer-events: none;
+
+    padding-left: 22px;
+}
+
+
+.slider-voltar-botao {
+
+    width: 28px;
+    height: 28px;
+
+    background: #6741d9;
+
+    color: white;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 13px;
+
+    cursor: grab;
+
+    box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+
+    position: relative;
+
+    z-index: 2;
+
+    touch-action: none;
+}
+
+
+.slider-voltar-botao:active {
+
+    cursor: grabbing;
+
+    background: #5f3dc4;
+}
+
+
+/* =====================================================
+   CABEÇALHO
+===================================================== */
+
+header {
+
+    text-align: center;
+
+    flex-shrink: 0;
+
+    padding-bottom: 4px;
+}
+
+
+.logo {
+
+    font-size:
+        clamp(24px, 4vw, 42px);
+
+    line-height: .9;
+}
+
+
+h1 {
+
+    color: #6741d9;
+
+    font-size:
+        clamp(20px, 3.5vw, 34px);
+
+    line-height: 1.1;
+}
+
+
+.subtitulo {
+
+    color: #666;
+
+    font-size:
+        clamp(9px, 1.7vw, 14px);
+
+    margin-top: 2px;
+}
+
+
+/* =====================================================
+   MENSAGEM
+===================================================== */
+
+.mensagem {
+
+    width: 100%;
+
+    min-height: 34px;
+
+    margin-bottom: 5px;
+
+    border-radius: 11px;
+
+    background: #e5dbff;
+
+    color: #4c2a9c;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size:
+        clamp(12px, 2.2vw, 18px);
+
+    font-weight: bold;
+
+    flex-shrink: 0;
+
+    transition: .15s;
+}
+
+
+.mensagem.pulsar {
+
+    animation: pulsar .2s;
+}
+
+
+@keyframes pulsar {
+
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.04);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+}
+
+
+/* =====================================================
+   ÁREA PRINCIPAL
+===================================================== */
+
+.bateria-area {
+
+    width: 100%;
+
+    flex: 1;
+
+    min-height: 0;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    overflow: hidden;
+}
+
+
+/* =====================================================
+   PALCO DA IMAGEM
+===================================================== */
+
+.bateria {
+
+    position: relative;
+
+    aspect-ratio: 1536 / 1024;
+
+    width: 100%;
+
+    max-width: 1100px;
+
+    max-height: 100%;
+
+    margin: auto;
+
+    overflow: hidden;
+
+    border-radius: 16px;
+
+    background: #5429a8;
+
+    flex-shrink: 1;
+}
+
+
+/* =====================================================
+   IMAGEM
+===================================================== */
+
+.bateria-imagem {
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: fill;
+
+    display: block;
+
+    pointer-events: none;
+
+    z-index: 1;
+}
+
+
+/* =====================================================
+   ÁREAS DE TOQUE
+===================================================== */
+
+.area {
+
+    position: absolute;
+
+    border: none;
+
+    background: transparent;
+
+    padding: 0;
+
+    margin: 0;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+
+    z-index: 20;
+
+    outline: none;
+
+    border-radius: 50%;
+}
+
+
+/* =====================================================
+   MODO DE AJUSTE
+===================================================== */
+
+.area.debug {
+
+    background:
+        rgba(255, 0, 0, 0.35);
+
+    border:
+        3px solid red;
+
+    box-shadow:
+        0 0 0 2px rgba(255,255,255,.8),
+        0 0 15px red;
+}
+
+
+.area.debug::before {
+
+    content: attr(data-nome);
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    background:
+        rgba(170, 0, 0, .9);
+
+    color: white;
+
+    padding: 4px 8px;
+
+    border-radius: 6px;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    white-space: nowrap;
+
+    pointer-events: none;
+
+    z-index: 30;
+}
+
+
+.area.debug::after {
+
+    content: "+";
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    width: 25px;
+    height: 25px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,0,0,.9);
+
+    border:
+        2px solid white;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    pointer-events: none;
+
+    z-index: 31;
+}
+
+
+/* =====================================================
+   ANIMAÇÃO AO TOCAR
+===================================================== */
+
+.area.tocando {
+
+    animation:
+        tocar .13s;
+}
+
+
+@keyframes tocar {
+
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(.94);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+
+}
+
+
+/* =====================================================
+   POSIÇÕES DAS ÁREAS DE TOQUE
+===================================================== */
+
+.crash {
+    left: 4%;
+    top: 3%;
+    width: 27%;
+    height: 20%;
+}
+
+.ride {
+    right: 4%;
+    top: 3%;
+    width: 27%;
+    height: 20%;
+}
+
+.tom1 {
+    left: 33%;
+    top: 9%;
+    width: 15%;
+    height: 15%;
+}
+
+.tom2 {
+    right: 33%;
+    top: 9%;
+    width: 15%;
+    height: 15%;
+}
+
+.tom3 {
+    left: 8%;
+    top: 25%;
+    width: 27%;
+    height: 25%;
+}
+
+.tom4 {
+    right: 8%;
+    top: 25%;
+    width: 27%;
+    height: 25%;
+}
+
+.surdo-esquerdo {
+    left: 6%;
+    top: 49%;
+    width: 29%;
+    height: 45%;
+}
+
+.surdo-direito {
+    right: 6%;
+    top: 49%;
+    width: 29%;
+    height: 45%;
+}
+
+.bumbo {
+    left: 35%;
+    top: 25%;
+    width: 30%;
+    height: 52%;
+}
+
+
+/* =====================================================
+   CONTROLES
+===================================================== */
+
+.controles {
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding-top: 4px;
+
+    flex-shrink: 0;
+}
+
+
+.botao {
+
+    border: none;
+
+    border-radius: 10px;
+
+    min-height: 34px;
+
+    padding:
+        4px 24px;
+
+    color: white;
+
+    font-size:
+        clamp(10px, 1.8vw, 14px);
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+}
+
+
+.parar {
+
+    background: #fa5252;
+}
+
+
+.botao:active {
+
+    transform: scale(.95);
+}
+
+
+/* =====================================================
+   INSTRUÇÃO
+===================================================== */
+
+.instrucao {
+
+    text-align: center;
+
+    color: #666;
+
+    font-size:
+        clamp(8px, 1.4vw, 11px);
+
+    padding-top: 3px;
+
+    flex-shrink: 0;
+}
+
+
+/* =====================================================
+   RESPONSIVIDADE (CELULAR / TABLET)
+===================================================== */
+
+@media(max-width: 600px) {
+
+    body {
+        padding: 2px;
+    }
+
+    .app {
+        border-radius: 14px;
+        padding: 4px;
+    }
+
+    .slider-voltar-container {
+        width: 115px;
+        height: 30px;
+        top: 4px;
+        left: 4px;
+    }
+
+    .slider-voltar-texto {
+        font-size: 8px;
+        padding-left: 16px;
+    }
+
+    .slider-voltar-botao {
+        width: 22px;
+        height: 22px;
+        font-size: 10px;
+    }
+
+    .logo {
+        font-size: 24px;
+    }
+
+    h1 {
+        font-size: 21px;
+    }
+
+    .subtitulo {
+        display: none;
+    }
+
+    .mensagem {
+        min-height: 29px;
+        margin-bottom: 3px;
+        font-size: 11px;
+    }
+
+    .bateria {
+        border-radius: 12px;
+    }
+
+    .controles {
+        padding-top: 3px;
+    }
+
+    .botao {
+        min-height: 30px;
+        padding: 3px 20px;
+        font-size: 10px;
+    }
+
+    .instrucao {
+        display: none;
+    }
+
+}
+
+
+@media(max-width: 400px) {
+
+    .logo {
+        font-size: 21px;
+    }
+
+    h1 {
+        font-size: 19px;
+    }
+
+    .mensagem {
+        min-height: 27px;
+        font-size: 10px;
+    }
+
+    .botao {
+        min-height: 28px;
+        padding: 3px 17px;
+        font-size: 9px;
+    }
+
+}
+
+
+@media(max-height: 500px) and (orientation: landscape) {
+
+    .logo {
+        display: none;
+    }
+
+    h1 {
+        font-size: 18px;
+    }
+
+    .subtitulo {
+        display: none;
+    }
+
+    .mensagem {
+        min-height: 24px;
+        margin-bottom: 2px;
+        font-size: 10px;
+    }
+
+    .controles {
+        padding-top: 2px;
+    }
+
+    .botao {
+        min-height: 24px;
+        padding: 2px 18px;
+    }
+
+    .instrucao {
+        display: none;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+<div class="slider-voltar-container" id="sliderPista">
+
+    <span class="slider-voltar-texto">➡️ Deslize p/ Voltar</span>
+
+    <div class="slider-voltar-botao" id="sliderBotao">
+        ⬅️
+    </div>
+
+</div>
+
+
+<header>
+
+    <div class="logo">
+        🧒🥁
+    </div>
+
+    <h1>
+        🥁 Bateria Kids
+    </h1>
+
+    <div class="subtitulo">
+        Toque na bateria e faça sua música!
+    </div>
+
+</header>
+
+
+<div
+    class="mensagem"
+    id="mensagem">
+
+    👆 Toque na bateria!
+
+</div>
+
+
+<div class="bateria-area">
+
+
+    <div class="bateria">
+
+
+        <img
+            src="bateria.png"
+            class="bateria-imagem"
+            alt="Bateria Kids">
+
+
+        <button
+            class="area crash"
+            data-som="crash"
+            data-nome="Prato esquerdo">
+        </button>
+
+
+        <button
+            class="area ride"
+            data-som="ride"
+            data-nome="Prato direito">
+        </button>
+
+
+        <button
+            class="area tom1"
+            data-som="tom1"
+            data-nome="Tom 1">
+        </button>
+
+
+        <button
+            class="area tom2"
+            data-som="tom2"
+            data-nome="Tom 2">
+        </button>
+
+
+        <button
+            class="area tom3"
+            data-som="tom3"
+            data-nome="Tom 3">
+        </button>
+
+
+        <button
+            class="area tom4"
+            data-som="tom4"
+            data-nome="Tom 4">
+        </button>
+
+
+        <button
+            class="area surdo-esquerdo"
+            data-som="surdo"
+            data-nome="Surdo esquerdo">
+        </button>
+
+
+        <button
+            class="area surdo-direito"
+            data-som="surdo"
+            data-nome="Surdo direito">
+        </button>
+
+
+        <button
+            class="area bumbo"
+            data-som="bumbo"
+            data-nome="Bumbo">
+        </button>
+
+
+    </div>
+
+</div>
+
+
+<div class="controles">
+
+    <button
+        class="botao parar"
+        onclick="pararAudio()">
+
+        🛑 Parar
+
+    </button>
+
+</div>
+
+
+<div class="instrucao">
+
+    📱 Toque nas peças da bateria
+
+</div>
+
+
+</div>
+
+
+<script>
+
+
+/* =====================================================
+   MODO DE AJUSTE
+===================================================== */
+
+const MODO_AJUSTE = false;
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        if (MODO_AJUSTE) {
+
+            document
+            .querySelectorAll(".area")
+            .forEach(
+                function(area) {
+
+                    area.classList.add(
+                        "debug"
+                    );
+
+                }
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   CONFIGURAÇÃO DOS SONS
+===================================================== */
+
+const sons = {
+
+    bumbo:
+        new Audio(
+            "sons/bumbo.mp3"
+        ),
+
+    caixa:
+        new Audio(
+            "sons/caixa.mp3"
+        ),
+
+    tom1:
+        new Audio(
+            "sons/tom1.mp3"
+        ),
+
+    tom2:
+        new Audio(
+            "sons/tom2.mp3"
+        ),
+
+    tom3:
+        new Audio(
+            "sons/tom3.mp3"
+        ),
+
+    tom4:
+        new Audio(
+            "sons/tom4.mp3"
+        ),
+
+    surdo:
+        new Audio(
+            "sons/surdo.mp3"
+        ),
+
+    chimbal:
+        new Audio(
+            "sons/chimbal.mp3"
+        ),
+
+    crash:
+        new Audio(
+            "sons/crash.mp3"
+        ),
+
+    ride:
+        new Audio(
+            "sons/ride.mp3"
+        )
+
+};
+
+
+/* =====================================================
+   VOLUME
+===================================================== */
+
+Object
+.values(sons)
+.forEach(
+    audio => {
+
+        audio.volume = .85;
+
+    }
+);
+
+
+/* =====================================================
+   TOCAR SOM
+===================================================== */
+
+function tocarAudio(nome) {
+
+    const audio =
+        sons[nome];
+
+
+    if (!audio) {
+
+        return;
+
+    }
+
+
+    audio.pause();
+
+    audio.currentTime = 0;
+
+
+    const promessa =
+        audio.play();
+
+
+    if (promessa) {
+
+        promessa.catch(
+            erro => {
+
+                console.log(
+                    "Áudio não encontrado:",
+                    nome
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   TOCAR PEÇA
+===================================================== */
+
+function tocarPeca(peca) {
+
+    const som =
+        peca.dataset.som;
+
+    const nome =
+        peca.dataset.nome;
+
+
+    tocarAudio(
+        som
+    );
+
+
+    peca.classList.remove(
+        "tocando"
+    );
+
+
+    void peca.offsetWidth;
+
+
+    peca.classList.add(
+        "tocando"
+    );
+
+
+    setTimeout(
+        function() {
+
+            peca.classList.remove(
+                "tocando"
+            );
+
+        },
+        150
+    );
+
+
+    const mensagem =
+        document.getElementById(
+            "mensagem"
+        );
+
+
+    mensagem.innerHTML =
+        "🥁 " +
+        nome +
+        "!";
+
+
+    mensagem.classList.remove(
+        "pulsar"
+    );
+
+
+    void mensagem.offsetWidth;
+
+
+    mensagem.classList.add(
+        "pulsar"
+    );
+
+}
+
+
+/* =====================================================
+   TOQUE / MOUSE BATERIA
+===================================================== */
+
+document
+.querySelectorAll(".area")
+.forEach(
+    function(peca) {
+
+        peca.addEventListener(
+            "pointerdown",
+            function(event) {
+
+                event.preventDefault();
+
+                tocarPeca(
+                    this
+                );
+
+            }
+        );
+
+    }
+);
+
+
+/* =====================================================
+   TECLADO DO PC
+===================================================== */
+
+const teclas = {
+
+    a: "crash",
+
+    s: "ride",
+
+    d: "tom1",
+
+    f: "tom2",
+
+    g: "tom3",
+
+    h: "tom4",
+
+    j: "surdo",
+
+    k: "bumbo"
+
+};
+
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        const tecla =
+            event.key.toLowerCase();
+
+
+        if (
+            teclas[tecla]
+        ) {
+
+            event.preventDefault();
+
+
+            const peca =
+                document.querySelector(
+                    `[data-som="${teclas[tecla]}"]`
+                );
+
+
+            if (peca) {
+
+                tocarPeca(
+                    peca
+                );
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   PARAR SOM
+===================================================== */
+
+function pararAudio() {
+
+    Object
+    .values(sons)
+    .forEach(
+        function(audio) {
+
+            audio.pause();
+
+            audio.currentTime = 0;
+
+        }
+    );
+
+
+    document
+    .querySelectorAll(".area")
+    .forEach(
+        function(area) {
+
+            area.classList.remove(
+                "tocando"
+            );
+
+        }
+    );
+
+
+    document.getElementById(
+        "mensagem"
+    ).innerHTML =
+        "👆 Toque na bateria!";
+
+}
+
+
+/* =====================================================
+   VOLTAR PÁGINA
+===================================================== */
+
+function voltarPagina() {
+
+    pararAudio();
+
+    if (window.history.length > 1) {
+
+        window.history.back();
+
+    } else {
+
+        window.location.href = "index.html";
+
+    }
+
+}
+
+
+/* =====================================================
+   LÓGICA DO SLIDER "DESLIZE PARA VOLTAR"
+===================================================== */
+
+const sliderPista = document.getElementById("sliderPista");
+const sliderBotao = document.getElementById("sliderBotao");
+
+let isDragging = false;
+let startX = 0;
+let currentX = 0;
+
+if (sliderBotao && sliderPista) {
+
+    sliderBotao.addEventListener("pointerdown", function(e) {
+
+        isDragging = true;
+
+        startX = e.clientX - currentX;
+
+        sliderBotao.setPointerCapture(e.pointerId);
+
+        sliderBotao.style.transition = "none";
+
+    });
+
+
+    sliderBotao.addEventListener("pointermove", function(e) {
+
+        if (!isDragging) return;
+
+        const maxDrag = sliderPista.clientWidth - sliderBotao.clientWidth - 4;
+
+        let x = e.clientX - startX;
+
+        if (x < 0) x = 0;
+
+        if (x > maxDrag) x = maxDrag;
+
+        currentX = x;
+
+        sliderBotao.style.transform = `translateX(${currentX}px)`;
+
+    });
+
+
+    function finalizarArrasto(e) {
+
+        if (!isDragging) return;
+
+        isDragging = false;
+
+        const maxDrag = sliderPista.clientWidth - sliderBotao.clientWidth - 4;
+
+
+        // Se deslizou mais de 75% da barra, aciona a ação de voltar
+        if (currentX >= maxDrag * 0.75) {
+
+            sliderBotao.style.transform = `translateX(${maxDrag}px)`;
+
+            voltarPagina();
+
+            setTimeout(() => {
+
+                sliderBotao.style.transition = "transform 0.3s ease";
+
+                sliderBotao.style.transform = "translateX(0px)";
+
+                currentX = 0;
+
+            }, 500);
+
+        } else {
+
+            // Se soltar antes do fim, volta suavemente para a posição inicial
+            sliderBotao.style.transition = "transform 0.3s ease";
+
+            sliderBotao.style.transform = "translateX(0px)";
+
+            currentX = 0;
+
+        }
+
+    }
+
+
+    sliderBotao.addEventListener("pointerup", finalizarArrasto);
+
+    sliderBotao.addEventListener("pointercancel", finalizarArrasto);
+
+}
+
+
+/* =====================================================
+   MOSTRAR COORDENADAS AO CLICAR (MODO AJUSTE)
+===================================================== */
+
+document
+.querySelector(".bateria")
+.addEventListener(
+    "pointerdown",
+    function(event) {
+
+        if (!MODO_AJUSTE) {
+
+            return;
+
+        }
+
+
+        const palco =
+            this.getBoundingClientRect();
+
+
+        const x =
+            ((event.clientX - palco.left)
+            / palco.width) * 100;
+
+
+        const y =
+            ((event.clientY - palco.top)
+            / palco.height) * 100;
+
+
+        console.log("=========================");
+
+        console.log("POSIÇÃO TOCADA");
+
+        console.log("left:", x.toFixed(2) + "%");
+
+        console.log("top:", y.toFixed(2) + "%");
+
+        console.log("=========================");
+
+    }
+);
+
+
+</script>
+
+
+</body>
+
+</html>

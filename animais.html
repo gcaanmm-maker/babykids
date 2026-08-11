@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width,
+      initial-scale=1.0,
+      maximum-scale=1.0,
+      user-scalable=no">
+
+<title>🐾 Animais Kids</title>
+
+<style>
+
+/* =====================================================
+   CONFIGURAÇÃO GERAL
+===================================================== */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+body {
+
+    background:
+        linear-gradient(
+            135deg,
+            #74b816,
+            #40c057,
+            #20c997
+        );
+
+    padding: 5px;
+}
+
+
+/* =====================================================
+   APLICAÇÃO
+===================================================== */
+
+.app {
+
+    width: 100%;
+    height: 100%;
+
+    max-width: 1100px;
+
+    margin: auto;
+
+    background:
+        rgba(255,255,255,.97);
+
+    border-radius: 22px;
+
+    padding: 10px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,0,0,.25);
+
+    overflow: hidden;
+
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+/* =====================================================
+   BOTÃO VOLTAR (BLOQUEIO PARENTAL)
+===================================================== */
+
+.voltar-container {
+    width: 100%;
+    max-width: 180px;
+    background: #e9ecef;
+    padding: 6px 10px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 6px;
+    align-self: flex-start;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.08);
+    flex-shrink: 0;
+}
+
+.voltar-container label {
+    font-size: 11px;
+    color: #495057;
+    font-weight: bold;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.slider-voltar {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 20px;
+    border-radius: 10px;
+    background: #dee2e6;
+    outline: none;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,.15);
+    cursor: pointer;
+}
+
+.slider-voltar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #20c997;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,.25);
+    transition: background .2s;
+}
+
+.slider-voltar::-moz-range-thumb {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #20c997;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,.25);
+    transition: background .2s;
+}
+
+
+/* =====================================================
+   CABEÇALHO
+===================================================== */
+
+header {
+
+    text-align: center;
+
+    flex-shrink: 0;
+}
+
+.personagem {
+
+    font-size:
+        clamp(30px, 6vw, 55px);
+
+    line-height: 1;
+
+    animation:
+        pular 1.5s infinite;
+}
+
+@keyframes pular {
+
+    50% {
+
+        transform:
+            translateY(-5px);
+
+    }
+
+}
+
+h1 {
+
+    font-size:
+        clamp(25px, 5vw, 42px);
+
+    color: #2b8a3e;
+
+    line-height: 1.1;
+}
+
+.subtitulo {
+
+    margin-top: 3px;
+
+    color: #666;
+
+    font-size:
+        clamp(12px, 2.5vw, 17px);
+}
+
+
+/* =====================================================
+   MENSAGEM
+===================================================== */
+
+.mensagem {
+
+    width: 100%;
+
+    min-height: 43px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background: #fff3bf;
+
+    border-radius: 14px;
+
+    font-size:
+        clamp(16px, 4vw, 25px);
+
+    font-weight: bold;
+
+    text-align: center;
+
+    padding: 5px;
+
+    margin:
+        8px 0;
+
+    flex-shrink: 0;
+}
+
+
+/* =====================================================
+   GRADE DOS ANIMAIS
+===================================================== */
+
+.animais {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 7px;
+
+    width: 100%;
+
+    flex: 1;
+
+    min-height: 0;
+}
+
+
+/* =====================================================
+   BOTÃO DO ANIMAL
+===================================================== */
+
+.animal {
+
+    border: none;
+
+    min-height: 0;
+
+    width: 100%;
+
+    border-radius: 17px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    cursor: pointer;
+
+    position: relative;
+
+    transition:
+        transform .1s,
+        box-shadow .1s;
+
+    box-shadow:
+        0 4px 0
+        rgba(0,0,0,.18);
+
+    touch-action: manipulation;
+
+    overflow: hidden;
+}
+
+.animal:active,
+.animal.animando {
+
+    transform:
+        translateY(4px)
+        scale(.96);
+
+    box-shadow: none;
+}
+
+
+/* =====================================================
+   EMOJI
+===================================================== */
+
+.emoji {
+
+    font-size:
+        clamp(35px, 7vw, 65px);
+
+    line-height: 1;
+
+    transition:
+        transform .15s;
+}
+
+.animal:active .emoji {
+
+    transform:
+        scale(1.1);
+}
+
+
+/* =====================================================
+   NOME
+===================================================== */
+
+.nome {
+
+    margin-top: 4px;
+
+    font-size:
+        clamp(11px, 2.2vw, 19px);
+
+    font-weight: bold;
+
+    color: #333;
+
+    line-height: 1;
+}
+
+
+/* =====================================================
+   SOM ESCRITO
+===================================================== */
+
+.som {
+
+    margin-top: 3px;
+
+    font-size:
+        clamp(9px, 1.8vw, 14px);
+
+    color: #555;
+
+    line-height: 1;
+}
+
+
+/* =====================================================
+   ÍCONE DE SOM
+===================================================== */
+
+.icone-som {
+
+    position: absolute;
+
+    top: 4px;
+    right: 5px;
+
+    font-size:
+        clamp(12px, 2vw, 20px);
+}
+
+
+/* =====================================================
+   CORES DOS ANIMAIS
+===================================================== */
+
+.cachorro {
+    background: #ffd8a8;
+}
+
+.gato {
+    background: #ffdeeb;
+}
+
+.vaca {
+    background: #f8f9fa;
+}
+
+.porco {
+    background: #fcc2d7;
+}
+
+.leao {
+    background: #ffe066;
+}
+
+.macaco {
+    background: #d8f5a2;
+}
+
+.galinha {
+    background: #fff3bf;
+}
+
+.pato {
+    background: #a5d8ff;
+}
+
+.elefante {
+    background: #ced4da;
+}
+
+.cavalo {
+    background: #e7c9a9;
+}
+
+.ovelha {
+    background: #f1f3f5;
+}
+
+.sapo {
+    background: #b2f2bb;
+}
+
+
+/* =====================================================
+   AVISO
+===================================================== */
+
+.aviso {
+
+    display: none;
+
+    margin-top: 5px;
+
+    padding: 7px;
+
+    border-radius: 10px;
+
+    background: #ffe3e3;
+
+    color: #c92a2a;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    flex-shrink: 0;
+}
+
+
+/* =====================================================
+   BOTÃO PARAR
+===================================================== */
+
+.controles {
+
+    display: flex;
+
+    justify-content: center;
+
+    margin-top: 7px;
+
+    flex-shrink: 0;
+}
+
+.btn-parar {
+
+    border: none;
+
+    border-radius: 12px;
+
+    min-height: 42px;
+
+    padding:
+        6px 35px;
+
+    color: white;
+
+    background: #fa5252;
+
+    font-size:
+        clamp(12px, 2.2vw, 17px);
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+}
+
+.btn-parar:active {
+
+    transform:
+        scale(.96);
+}
+
+
+/* =====================================================
+   INSTRUÇÃO
+===================================================== */
+
+.instrucao {
+
+    margin-top: 5px;
+
+    padding: 5px;
+
+    background: #f1f3f5;
+
+    border-radius: 10px;
+
+    color: #555;
+
+    text-align: center;
+
+    font-size:
+        clamp(9px, 1.8vw, 13px);
+
+    line-height: 1.2;
+
+    flex-shrink: 0;
+}
+
+
+/* =====================================================
+   CELULAR
+===================================================== */
+
+@media(max-width: 700px) {
+
+    body {
+        padding: 3px;
+    }
+
+    .app {
+
+        padding: 7px;
+
+        border-radius: 17px;
+    }
+
+    .voltar-container {
+        max-width: 140px;
+        padding: 4px 8px;
+        margin-bottom: 4px;
+    }
+
+    .voltar-container label {
+        font-size: 9px;
+    }
+
+    .slider-voltar {
+        height: 16px;
+    }
+
+    .slider-voltar::-webkit-slider-thumb {
+        width: 22px;
+        height: 22px;
+    }
+
+    .slider-voltar::-moz-range-thumb {
+        width: 22px;
+        height: 22px;
+    }
+
+    .personagem {
+
+        font-size: 32px;
+    }
+
+    h1 {
+
+        font-size: 26px;
+    }
+
+    .subtitulo {
+
+        font-size: 11px;
+    }
+
+    .mensagem {
+
+        min-height: 39px;
+
+        margin:
+            5px 0;
+
+        font-size: 16px;
+
+        border-radius: 11px;
+    }
+
+    .animais {
+
+        grid-template-columns:
+            repeat(4, 1fr);
+
+        gap: 5px;
+    }
+
+    .animal {
+
+        border-radius: 12px;
+
+        box-shadow:
+            0 3px 0
+            rgba(0,0,0,.18);
+    }
+
+    .emoji {
+
+        font-size: 38px;
+    }
+
+    .nome {
+
+        font-size: 11px;
+    }
+
+    .som {
+
+        display: none;
+    }
+
+    .icone-som {
+
+        font-size: 13px;
+
+        top: 3px;
+        right: 4px;
+    }
+
+    .controles {
+
+        margin-top: 5px;
+    }
+
+    .btn-parar {
+
+        min-height: 37px;
+
+        padding:
+            5px 30px;
+
+        font-size: 11px;
+
+        border-radius: 10px;
+    }
+
+    .instrucao {
+
+        font-size: 9px;
+
+        margin-top: 4px;
+
+        padding: 4px;
+    }
+
+}
+
+
+/* =====================================================
+   CELULAR PEQUENO
+===================================================== */
+
+@media(max-width: 430px) {
+
+    .personagem {
+
+        font-size: 27px;
+    }
+
+    h1 {
+
+        font-size: 23px;
+    }
+
+    .subtitulo {
+
+        font-size: 10px;
+    }
+
+    .mensagem {
+
+        min-height: 35px;
+
+        font-size: 14px;
+    }
+
+    .animais {
+
+        gap: 4px;
+    }
+
+    .emoji {
+
+        font-size: 32px;
+    }
+
+    .nome {
+
+        font-size: 9px;
+    }
+
+    .icone-som {
+
+        font-size: 11px;
+    }
+
+    .btn-parar {
+
+        min-height: 34px;
+
+        font-size: 10px;
+    }
+
+    .instrucao {
+
+        font-size: 8px;
+
+        padding: 3px;
+    }
+
+}
+
+
+/* =====================================================
+   CELULAR DEITADO
+===================================================== */
+
+@media(
+    max-height: 500px
+) and (
+    orientation: landscape
+) {
+
+    .personagem {
+
+        display: none;
+    }
+
+    h1 {
+
+        font-size: 22px;
+    }
+
+    .subtitulo {
+
+        display: none;
+    }
+
+    .mensagem {
+
+        min-height: 30px;
+
+        margin-bottom: 3px;
+    }
+
+    .animal {
+
+        border-radius: 10px;
+    }
+
+    .emoji {
+
+        font-size: 30px;
+    }
+
+    .nome {
+
+        font-size: 9px;
+    }
+
+    .controles {
+
+        margin-top: 3px;
+    }
+
+    .btn-parar {
+
+        min-height: 30px;
+    }
+
+    .instrucao {
+
+        display: none;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+<div class="voltar-container">
+
+    <label for="sliderVoltar">
+        🔒 Arraste ➡️ Sair
+    </label>
+
+    <input 
+        type="range" 
+        id="sliderVoltar" 
+        class="slider-voltar" 
+        min="0" 
+        max="100" 
+        value="0">
+
+</div>
+
+
+<header>
+
+    <div class="personagem">
+        🧒🐾
+    </div>
+
+    <h1>
+        🐾 Animais Kids
+    </h1>
+
+    <div class="subtitulo">
+        Toque nos animais e descubra seus sons!
+    </div>
+
+</header>
+
+
+<div
+    class="mensagem"
+    id="mensagem">
+
+    👆 Toque em um animal!
+
+</div>
+
+
+<div class="animais">
+
+
+<button
+    class="animal cachorro"
+    data-animal="Cachorro"
+    data-audio="cachorro.mp3"
+    onclick="tocarAnimal(this)">
+
+    <span class="icone-som">
+        🔊
+    </span>
+
+    <div class="emoji">
+        🐶
+    </div>
+
+    <div class="nome">
+        Cachorro
+    </div>
+
+    <div class="som">
+        Au au!
+    </div>
+
+</button>
+
+
+<button
+    class="animal gato"
+    data-animal="Gato"
+    data-audio="gato.mp3"
+    onclick="tocarAnimal(this)">
+
+    <span class="icone-som">
+        🔊
+    </span>
+
+    <div class="emoji">
+        🐱
+    </div>
+
+    <div class="nome">
+        Gato
+    </div>
+
+    <div class="som">
+        Miau!
+    </div>
+
+</button>
+
+
+<button
+    class="animal vaca"
+    data-animal="Vaca"
+    data-audio="vaca.mp3"
+    onclick="tocarAnimal(this)">
+
+    <span class="icone-som">
+        🔊
+    </span>
+
+    <div class="emoji">
+        🐮
+    </div>
+
+    <div class="nome">
+        Vaca
+    </div>
+
+    <div class="som">
+        Muuu!
+    </div>
+
+</button>
+
+
+<button
+    class="animal porco"
+    data-animal="Porco"
+    data-audio="porco.mp3"
+    onclick="tocarAnimal(this)">
+
+    <span class="icone-som">
+        🔊
+    </span>
+
+    <div class="emoji">
+        🐷
+    </div>
+
+    <div class="nome">
+        Porco
+    </div>
+
+    <div class="som">
+        Oinc!
+    </div>
+
+</button>
+
+
+<button
+    class="animal leao"
+    data-animal="Leão"
+    data-audio="leao.mp3"
+    onclick="tocarAnimal(this)">
+
+    <span class="icone-som">
+        🔊
+    </span>
+
+    <div class="emoji">
+        🦁
+    </div>
+
+    <div class="nome">
+        Leão
+    </div>
+
+    <div class="som">
+        Grrrr!
+    </div>
+
+</button>
+
+
+<button
+    class="animal macaco"
+    data-animal="Macaco"
+    data-audio="macaco.mp3"
+    onclick="tocarAnimal(this)">
+
+    <span class="icone-som">
+        🔊
+    </span>
+
+    <div class="emoji">
+        🐵
+    </div>
+
+    <div class="nome">
+        Macaco
+    </div>
+
+    <div class="som">
+        Uh uh!
+    </div>
+
+</button>
+
+
+<button
+    class="animal galinha"
+    data-animal="Galinha"
+    data-audio="galinha.mp3"
+    onclick="tocarAnimal(this)">
+
+    <span class="icone-som">
+        🔊
+    </span>
+
+    <div class="emoji">
+        🐔
+    </div>
+
+    <div class="nome">
+        Galinha
+    </div>
+
+    <div class="som">
+        Cocoricó!
+    </div>
+
+</button>
+
+
+<button
+    class="animal pato"
+    data-animal="Pato"
+    data-audio="pato.mp3"
+    onclick="tocarAnimal(this)">
+
+    <span class="icone-som">
+        🔊
+    </span>
+
+    <div class="emoji">
+        🦆
+    </div>
+
+    <div class="nome">
+        Pato
+    </div>
+
+    <div class="som">
+        Quá quá!
+    </div>
+
+</button>
+
+
+<button
+    class="animal elefante"
+    data-animal="Elefante"
+    data-audio="elefante.mp3"
+    onclick="tocarAnimal(this)">
+
+    <span class="icone-som">
+        🔊
+    </span>
+
+    <div class="emoji">
+        🐘
+    </div>
+
+    <div class="nome">
+        Elefante
+    </div>
+
+    <div class="som">
+        Pruuu!
+    </div>
+
+</button>
+
+
+<button
+    class="animal cavalo"
+    data-animal="Cavalo"
+    data-audio="cavalo.mp3"
+    onclick="tocarAnimal(this)">
+
+    <span class="icone-som">
+        🔊
+    </span>
+
+    <div class="emoji">
+        🐴
+    </div>
+
+    <div class="nome">
+        Cavalo
+    </div>
+
+    <div class="som">
+        Hiiiin!
+    </div>
+
+</button>
+
+
+<button
+    class="animal ovelha"
+    data-animal="Ovelha"
+    data-audio="ovelha.mp3"
+    onclick="tocarAnimal(this)">
+
+    <span class="icone-som">
+        🔊
+    </span>
+
+    <div class="emoji">
+        🐑
+    </div>
+
+    <div class="nome">
+        Ovelha
+    </div>
+
+    <div class="som">
+        Bééé!
+    </div>
+
+</button>
+
+
+<button
+    class="animal sapo"
+    data-animal="Sapo"
+    data-audio="sapo.mp3"
+    onclick="tocarAnimal(this)">
+
+    <span class="icone-som">
+        🔊
+    </span>
+
+    <div class="emoji">
+        🐸
+    </div>
+
+    <div class="nome">
+        Sapo
+    </div>
+
+    <div class="som">
+        Coax!
+    </div>
+
+</button>
+
+
+</div>
+
+
+<div
+    class="aviso"
+    id="aviso">
+
+    ⚠️ Arquivo de áudio não encontrado.
+
+</div>
+
+
+<div class="controles">
+
+    <button
+        class="btn-parar"
+        onclick="pararSom()">
+
+        🛑 Parar som
+
+    </button>
+
+</div>
+
+
+<div class="instrucao">
+
+    📱 Toque em um animal para ouvir seu som!
+
+</div>
+
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   CONFIGURAÇÃO DOS SONS
+===================================================== */
+
+const pastaSons = "sons/";
+
+
+/* =====================================================
+   SOM ATUAL
+===================================================== */
+
+let somAtual = null;
+
+
+/* =====================================================
+   TOCAR ANIMAL
+===================================================== */
+
+function tocarAnimal(animal) {
+
+
+    /*
+        Para o som anterior
+    */
+
+    pararSom();
+
+
+    /*
+        Nome do arquivo
+    */
+
+    const arquivo =
+        animal.dataset.audio;
+
+
+    /*
+        Caminho completo
+    */
+
+    const caminho =
+        pastaSons + arquivo;
+
+
+    /*
+        Cria o áudio
+    */
+
+    somAtual =
+        new Audio(caminho);
+
+
+    somAtual.volume = 1;
+
+
+    /*
+        Toca o som
+    */
+
+    somAtual.play()
+
+        .catch(() => {
+
+            mostrarAvisoAudio();
+
+        });
+
+
+    /*
+        Animação do animal
+    */
+
+    animal.classList.add(
+        "animando"
+    );
+
+
+    setTimeout(() => {
+
+        animal.classList.remove(
+            "animando"
+        );
+
+    }, 300);
+
+
+    /*
+        Mostra o nome
+    */
+
+    document.getElementById(
+        "mensagem"
+    ).innerHTML =
+
+        animal.querySelector(
+            ".emoji"
+        ).textContent +
+
+        " " +
+
+        animal.dataset.animal;
+
+}
+
+
+/* =====================================================
+   PARAR SOM
+===================================================== */
+
+function pararSom() {
+
+
+    if (somAtual) {
+
+        somAtual.pause();
+
+        somAtual.currentTime = 0;
+
+        somAtual = null;
+
+    }
+
+}
+
+
+/* =====================================================
+   AVISO DE ÁUDIO
+===================================================== */
+
+function mostrarAvisoAudio() {
+
+
+    const aviso =
+        document.getElementById(
+            "aviso"
+        );
+
+
+    aviso.style.display =
+        "block";
+
+
+    setTimeout(() => {
+
+        aviso.style.display =
+            "none";
+
+    }, 3500);
+
+}
+
+
+/* =====================================================
+   BLOQUEIO PARENTAL (DESLIZE PARA VOLTAR)
+===================================================== */
+
+const sliderVoltar = document.getElementById("sliderVoltar");
+
+function resetarSlider() {
+    if (sliderVoltar.value < 100) {
+        sliderVoltar.value = 0;
+    }
+}
+
+sliderVoltar.addEventListener("input", function() {
+    if (parseInt(this.value, 10) === 100) {
+        window.location.href = "index.html";
+    }
+});
+
+sliderVoltar.addEventListener("change", resetarSlider);
+sliderVoltar.addEventListener("touchend", resetarSlider);
+sliderVoltar.addEventListener("mouseup", resetarSlider);
+
+</script>
+
+
+</body>
+
+</html>

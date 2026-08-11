@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Corrida Infantil</title>
+
+<style>
+
+html,body{
+    margin:0;
+    overflow:hidden;
+    touch-action:none;
+    background:#87CEEB;
+}
+
+canvas{
+    display:block;
+}
+
+#car{
+    position:absolute;
+    bottom:20px;
+    left:50%;
+    width:150px;
+    transform:translateX(-50%);
+    pointer-events:none;
+}
+
+#score{
+    position:absolute;
+    top:10px;
+    right:10px; /* Posicionado à direita para não chocar com o botão de voltar */
+    background:white;
+    padding:10px 20px;
+    border-radius:20px;
+    font:bold 22px Arial;
+    z-index:10;
+}
+
+/* =====================================================
+   BOTÃO SLIDER "DESLIZE PARA VOLTAR"
+===================================================== */
+.slider-voltar-container {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 1000;
+    width: 145px;
+    height: 36px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    touch-action: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.slider-voltar-texto {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-size: 11px;
+    font-weight: bold;
+    color: #fff;
+    pointer-events: none;
+    padding-left: 22px;
+}
+
+.slider-voltar-botao {
+    width: 28px;
+    height: 28px;
+    background: #ff4757;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: grab;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+    position: relative;
+    z-index: 2;
+    touch-action: none;
+}
+
+.slider-voltar-botao:active {
+    cursor: grabbing;
+}
+
+@media(max-width: 600px) {
+    .slider-voltar-container {
+        width: 115px;
+        height: 30px;
+        top: 5px;
+        left: 5px;
+    }
+    .slider-voltar-texto {
+        font-size: 8px;
+        padding-left: 16px;
+    }
+    .slider-voltar-botao {
+        width: 22px;
+        height: 22px;
+        font-size: 10px;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<!-- BOTÃO DESLIZE PARA VOLTAR -->
+<div class="slider-voltar-container" id="sliderPista">
+    <span class="slider-voltar-texto">➡️ Deslize p/ Voltar</span>
+    <div class="slider-voltar-botao" id="sliderBotao">
+        ⬅️
+    </div>
+</div>
+
+<div id="score">🪙 0</div>
+
+<img id="car" src="carro1.png">
+
+<canvas id="game"></canvas>
+
+<script>
+
+const canvas=document.getElementById("game");
+const ctx=canvas.getContext("2d");
+
+const car=document.getElementById("car");
+const scoreDiv=document.getElementById("score");
+
+function resize(){
+    canvas.width=window.innerWidth;
+    canvas.height=window.innerHeight;
+}
+resize();
+window.addEventListener("resize",resize);
+
+let score=0;
+
+let carX=window.innerWidth/2;
+
+document.addEventListener("mousemove",e=>{
+    carX=e.clientX;
+});
+
+document.addEventListener("touchmove",e=>{
+    e.preventDefault();
+    carX=e.touches[0].clientX;
+},{passive:false});
+
+function updateCar(){
+    if(carX<80) carX=80;
+    if(carX>window.innerWidth-80)
+        carX=window.innerWidth-80;
+    car.style.left=carX+"px";
+}
+
+/* faixa central */
+let roadOffset=0;
+
+/* moedas */
+const coins=[];
+setInterval(()=>{
+    coins.push({
+        x:canvas.width*0.25+
+           Math.random()*(canvas.width*0.5),
+        y:-50
+    });
+},1000);
+
+/* som */
+function sound(){
+    const audio=
+    new(window.AudioContext||
+    window.webkitAudioContext)();
+
+    const osc=audio.createOscillator();
+    const gain=audio.createGain();
+
+    osc.frequency.value=800;
+
+    osc.connect(gain);
+    gain.connect(audio.destination);
+
+    gain.gain.value=0.08;
+
+    osc.start();
+    osc.stop(audio.currentTime+0.15);
+}
+
+/* desenho */
+function draw(){
+    requestAnimationFrame(draw);
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    /* céu */
+    ctx.fillStyle="#87CEEB";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    /* grama */
+    ctx.fillStyle="#6bd16b";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    /* estrada */
+    const roadW=canvas.width*0.55;
+    const roadX=canvas.width/2-roadW/2;
+    
+    ctx.fillStyle="#555";
+    ctx.fillRect(roadX,0,roadW,canvas.height);
+
+    roadOffset+=5;
+
+    /* faixa central */
+    ctx.fillStyle="white";
+    for(let y=-80;y<canvas.height+80;y+=120){
+        ctx.fillRect(
+            canvas.width/2-8,
+            y+(roadOffset%120),
+            16,
+            60
+        );
+    }
+
+    /* árvores */
+    ctx.font="40px Arial";
+    for(let y=-100;y<canvas.height+100;y+=120){
+        let py=y+(roadOffset*0.7)%120;
+        ctx.fillText("🌳",roadX-50,py);
+        ctx.fillText("🌲",roadX+roadW+10,py);
+    }
+
+    /* flores */
+    ctx.font="28px Arial";
+    for(let y=-50;y<canvas.height+50;y+=90){
+        let py=y+(roadOffset*0.5)%90;
+        ctx.fillText("🌼",20,py);
+        ctx.fillText("🌸",canvas.width-40,py);
+    }
+
+    /* moedas */
+    ctx.font="42px Arial";
+    const carY=canvas.height-80;
+
+    for(let i=coins.length-1;i>=0;i--){
+        const c=coins[i];
+        c.y+=8;
+        ctx.fillText("🪙",c.x,c.y);
+
+        let dx=c.x-carX;
+        let dy=c.y-carY;
+        let dist=Math.sqrt(dx*dx+dy*dy);
+
+        if(dist<55){
+            score++;
+            scoreDiv.innerHTML="🪙 "+score;
+            sound();
+            coins.splice(i,1);
+            continue;
+        }
+
+        if(c.y>canvas.height+60){
+            coins.splice(i,1);
+        }
+    }
+
+    /* nuvens */
+    ctx.font="60px Arial";
+    ctx.fillText("☁️",50,80);
+    ctx.fillText("☁️",canvas.width-150,120);
+
+    updateCar();
+}
+
+draw();
+
+/* =====================================================
+   LÓGICA DO SLIDER "DESLIZE PARA VOLTAR"
+===================================================== */
+function voltarPagina() {
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        window.location.href = "index.html";
+    }
+}
+
+const sliderPista = document.getElementById("sliderPista");
+const sliderBotao = document.getElementById("sliderBotao");
+
+let isDragging = false;
+let startX = 0;
+let currentX = 0;
+
+if (sliderBotao && sliderPista) {
+    sliderBotao.addEventListener("pointerdown", function(e) {
+        isDragging = true;
+        startX = e.clientX - currentX;
+        sliderBotao.setPointerCapture(e.pointerId);
+        sliderBotao.style.transition = "none";
+    });
+
+    sliderBotao.addEventListener("pointermove", function(e) {
+        if (!isDragging) return;
+        const maxDrag = sliderPista.clientWidth - sliderBotao.clientWidth - 4;
+        let x = e.clientX - startX;
+        if (x < 0) x = 0;
+        if (x > maxDrag) x = maxDrag;
+        currentX = x;
+        sliderBotao.style.transform = `translateX(${currentX}px)`;
+    });
+
+    function finalizarArrasto(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        const maxDrag = sliderPista.clientWidth - sliderBotao.clientWidth - 4;
+
+        if (currentX >= maxDrag * 0.75) {
+            sliderBotao.style.transform = `translateX(${maxDrag}px)`;
+            voltarPagina();
+            setTimeout(() => {
+                sliderBotao.style.transition = "transform 0.3s ease";
+                sliderBotao.style.transform = "translateX(0px)";
+                currentX = 0;
+            }, 500);
+        } else {
+            sliderBotao.style.transition = "transform 0.3s ease";
+            sliderBotao.style.transform = "translateX(0px)";
+            currentX = 0;
+        }
+    }
+
+    sliderBotao.addEventListener("pointerup", finalizarArrasto);
+    sliderBotao.addEventListener("pointercancel", finalizarArrasto);
+}
+</script>
+</body>
+</html>
