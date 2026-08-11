@@ -41,7 +41,15 @@ body {
 ===================================================== */
 
 body {
-    background: linear-gradient(135deg, #7048e8, #a55eea, #48dbfb);
+    background:
+        linear-gradient(
+            135deg,
+            #7048e8,
+            #a55eea,
+            #48dbfb
+        );
+    min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -64,22 +72,22 @@ body {
 }
 
 .bolha1 {
-    width: 220px;
-    height: 220px;
-    top: -100px;
-    left: -80px;
+    width: 250px;
+    height: 250px;
+    top: -120px;
+    left: -100px;
 }
 
 .bolha2 {
-    width: 280px;
-    height: 280px;
-    right: -120px;
-    bottom: -120px;
+    width: 320px;
+    height: 320px;
+    right: -150px;
+    bottom: -150px;
 }
 
 .bolha3 {
-    width: 90px;
-    height: 90px;
+    width: 100px;
+    height: 100px;
     left: 5%;
     top: 40%;
 }
@@ -92,7 +100,7 @@ body {
 .estrela {
     position: fixed;
     color: white;
-    font-size: 18px;
+    font-size: 20px;
     opacity: .65;
     pointer-events: none;
     animation: brilho 2s infinite alternate;
@@ -120,8 +128,8 @@ body {
     z-index: 2;
     width: 100%;
     height: 100%;
-    max-width: 1100px;
-    max-height: 750px;
+    max-width: 1050px;
+    max-height: 650px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -140,39 +148,39 @@ header {
 }
 
 .logo {
-    font-size: clamp(28px, 5vh, 45px);
-    line-height: .9;
+    font-size: clamp(26px, 5vh, 48px);
+    line-height: .85;
     animation: flutuar 3s ease-in-out infinite;
 }
 
 @keyframes flutuar {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-4px); }
+    50% { transform: translateY(-5px); }
 }
 
 h1 {
-    font-size: clamp(22px, 4.5vh, 38px);
-    line-height: 1.1;
+    font-size: clamp(20px, 4vh, 36px);
+    line-height: 1;
     font-weight: 900;
     margin-top: 2px;
     text-shadow: 0 3px 0 rgba(0,0,0,.15);
 }
 
 .subtitulo {
-    font-size: clamp(11px, 2vh, 15px);
+    font-size: clamp(11px, 2vh, 16px);
     font-weight: bold;
     margin-top: 2px;
 }
 
 .frase {
-    font-size: clamp(9px, 1.5vh, 12px);
-    margin-top: 2px;
+    font-size: clamp(9px, 1.6vh, 13px);
+    margin-top: 1px;
     opacity: .9;
 }
 
 
 /* =====================================================
-   CARDS (GRADE FLEXÍVEL)
+   CARDS
 ===================================================== */
 
 .cards {
@@ -183,11 +191,13 @@ h1 {
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(2, 1fr);
     gap: 10px;
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 
 /* =====================================================
-   CARD INDIVIDUAL
+   CARD
 ===================================================== */
 
 .card {
@@ -202,9 +212,7 @@ h1 {
     justify-content: center;
     padding: 8px;
     border-radius: 18px;
-    background: white;
     text-decoration: none;
-    color: #333;
     overflow: hidden;
     box-shadow: 0 6px 16px rgba(0,0,0,.18);
     transition: transform .2s, box-shadow .2s;
@@ -213,16 +221,16 @@ h1 {
 .card::before {
     content: "";
     position: absolute;
-    width: 90px;
-    height: 90px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-    top: -45px;
-    right: -30px;
-    background: rgba(255,255,255,.4);
+    top: -50px;
+    right: -35px;
+    background: rgba(255,255,255,.35);
 }
 
 .card:hover {
-    transform: translateY(-3px) scale(1.02);
+    transform: translateY(-4px) scale(1.02);
     box-shadow: 0 12px 25px rgba(0,0,0,.22);
 }
 
@@ -232,33 +240,34 @@ h1 {
 
 
 /* =====================================================
+   CORES E FUNDOS DOS CARDS
+===================================================== */
+
+.animais { background: #fff3bf; color: #5f370e; }
+.piano { background: #d0ebff; color: #1864ab; }
+.bateria { background: #ffe3e3; color: #c92a2a; }
+.carro { background: #ffec99; color: #e67700; }
+.foguete { background: #e5dbff; color: #5f3dc4; }
+.veiculos { background: #c3fae8; color: #0b7285; }
+
+
+/* =====================================================
    ÍCONES
 ===================================================== */
 
 .icone {
-    width: clamp(42px, 8vh, 75px);
-    height: clamp(42px, 8vh, 75px);
+    width: clamp(40px, 8vh, 75px);
+    height: clamp(40px, 8vh, 75px);
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 14px;
-    font-size: clamp(24px, 4.5vh, 45px);
+    background: rgba(255, 255, 255, 0.7);
+    font-size: clamp(24px, 5vh, 45px);
     margin-bottom: 4px;
-    box-shadow: inset 0 -3px 0 rgba(0,0,0,.10);
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,.08);
 }
-
-
-/* =====================================================
-   CORES DOS ÍCONES
-===================================================== */
-
-.animais .icone { background: #ffe066; }
-.piano .icone { background: #74c0fc; }
-.bateria .icone { background: #ff8787; }
-.carro .icone { background: #ff6b6b; }
-.foguete .icone { background: #b197fc; }
-.veiculos .icone { background: #63e6be; }
 
 
 /* =====================================================
@@ -266,7 +275,7 @@ h1 {
 ===================================================== */
 
 .card h2 {
-    font-size: clamp(12px, 2.2vh, 18px);
+    font-size: clamp(13px, 2.2vh, 19px);
     line-height: 1.1;
     font-weight: 900;
     margin-bottom: 2px;
@@ -278,33 +287,34 @@ h1 {
 ===================================================== */
 
 .card p {
-    max-width: 180px;
+    max-width: 170px;
     text-align: center;
-    font-size: clamp(8px, 1.4vh, 11px);
+    font-size: clamp(8px, 1.4vh, 12px);
     line-height: 1.1;
-    color: #666;
+    opacity: 0.85;
 }
 
 
 /* =====================================================
-   BOTÃO DE AÇÃO
+   BOTÃO
 ===================================================== */
 
 .abrir {
     margin-top: 4px;
-    padding: 3px 10px;
+    padding: 3px 12px;
     border-radius: 50px;
     color: white;
     font-size: clamp(8px, 1.4vh, 11px);
     font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0,0,0,.12);
 }
 
 .animais .abrir { background: #f59f00; }
 .piano .abrir { background: #1971c2; }
 .bateria .abrir { background: #e03131; }
-.carro .abrir { background: #c92a2a; }
+.carro .abrir { background: #f08c00; }
 .foguete .abrir { background: #7048e8; }
-.veiculos .abrir { background: #087f5b; }
+.veiculos .abrir { background: #0ca678; }
 
 
 /* =====================================================
@@ -315,7 +325,7 @@ footer {
     flex-shrink: 0;
     text-align: center;
     color: white;
-    font-size: clamp(8px, 1.3vh, 11px);
+    font-size: clamp(8px, 1.4vh, 11px);
     padding-top: 4px;
 }
 
@@ -326,12 +336,12 @@ footer {
 
 @media (orientation: landscape) {
     .container {
-        max-width: 900px;
-        max-height: 450px;
+        max-width: 850px;
+        max-height: 420px;
     }
 
     header {
-        margin-bottom: 4px;
+        margin-bottom: 2px;
     }
 
     .logo {
@@ -339,7 +349,7 @@ footer {
     }
 
     h1 {
-        font-size: clamp(18px, 3.5vh, 26px);
+        font-size: clamp(16px, 3.5vh, 24px);
     }
 
     .subtitulo {
@@ -351,20 +361,18 @@ footer {
     }
 
     .cards {
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(2, 1fr);
         gap: 8px;
     }
 
     .card {
-        padding: 6px;
+        padding: 5px;
         border-radius: 14px;
     }
 
     .icone {
-        width: clamp(35px, 7vh, 55px);
-        height: clamp(35px, 7vh, 55px);
-        font-size: clamp(20px, 4vh, 32px);
+        width: clamp(32px, 6.5vh, 50px);
+        height: clamp(32px, 6.5vh, 50px);
+        font-size: clamp(18px, 3.5vh, 28px);
         margin-bottom: 2px;
     }
 
@@ -373,7 +381,6 @@ footer {
     }
 
     .card p {
-        display: block; /* Mantém a descrição legível sem sobreposições */
         font-size: clamp(7px, 1.2vh, 10px);
     }
 
@@ -385,37 +392,6 @@ footer {
 
     footer {
         display: none;
-    }
-}
-
-
-/* =====================================================
-   TELAS MUITO PEQUENAS OU BAIXAS
-===================================================== */
-
-@media (max-height: 400px) {
-    .logo, .frase, footer {
-        display: none;
-    }
-
-    header {
-        margin-bottom: 2px;
-    }
-
-    h1 {
-        font-size: 15px;
-    }
-
-    .subtitulo {
-        font-size: 9px;
-    }
-
-    .card p {
-        display: none;
-    }
-
-    .cards {
-        gap: 6px;
     }
 }
 
