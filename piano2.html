@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Pianão Infantil 🎹</title>
+
+    <style>
+        /* =====================================================
+           CONFIGURAÇÃO GERAL
+        ===================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Trava qualquer barra de rolagem */
+            font-family: Arial, sans-serif;
+            background: #6a5acd;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a5acd, #00bfff, #ff69b4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        /* =====================================================
+           APLICAÇÃO (GAME)
+        ===================================================== */
+        .game {
+            position: relative; 
+            width: 100%;
+            height: 100%; /* Ajusta para a altura total disponível */
+            max-width: 1100px;
+            background: white;
+            border-radius: 30px;
+            padding: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* =====================================================
+           BOTÃO SLIDER "DESLIZE PARA VOLTAR"
+        ===================================================== */
+        .slider-voltar-container {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            z-index: 1000;
+            width: 145px;
+            height: 36px;
+            background: rgba(0, 0, 0, 0.08);
+            border: 2px solid rgba(0, 0, 0, 0.18);
+            border-radius: 20px;
+            padding: 2px;
+            display: flex;
+            align-items: center;
+            touch-action: none;
+        }
+
+        .slider-voltar-texto {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-size: 11px;
+            font-weight: bold;
+            color: #444;
+            pointer-events: none;
+            padding-left: 22px;
+        }
+
+        .slider-voltar-botao {
+            width: 28px;
+            height: 28px;
+            background: #ff4b91;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            cursor: grab;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 2;
+            touch-action: none;
+        }
+
+        .slider-voltar-botao:active {
+            cursor: grabbing;
+        }
+
+        /* =====================================================
+           TEXTOS E CABEÇALHO
+        ===================================================== */
+        h1 {
+            font-size: clamp(26px, 5vw, 42px);
+            color: #ff4b91;
+            margin-bottom: 5px;
+            flex-shrink: 0;
+        }
+
+        .subtitulo {
+            color: #555;
+            font-size: clamp(12px, 2.5vw, 18px);
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        .personagem {
+            font-size: clamp(40px, 8vw, 65px);
+            margin-bottom: 5px;
+            animation: pular 1.5s infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes pular {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .nota-atual {
+            min-height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: clamp(20px, 4vw, 30px);
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        /* =====================================================
+           PIANO E TECLAS
+        ===================================================== */
+        .piano {
+            position: relative;
+            width: 100%;
+            flex: 1; /* Faz o piano ocupar todo o espaço vertical sobrante */
+            min-height: 0; /* Previne o ecrã de estourar */
+            display: flex;
+            justify-content: center;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .tecla {
+            position: relative;
+            flex: 1;
+            min-width: 65px;
+            height: 100%; /* Adapta-se à altura do recipiente flex */
+            border: 3px solid #333;
+            border-radius: 0 0 15px 15px;
+            background: white;
+            cursor: pointer;
+            transition: 0.08s;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding-bottom: 15px;
+            font-size: clamp(18px, 3vw, 25px);
+            font-weight: bold;
+            color: #444;
+            box-shadow: 0 8px 0 #bbb;
+            touch-action: manipulation;
+        }
+
+        .tecla:hover { transform: translateY(3px); }
+        .tecla:active,
+        .tecla.tocando {
+            transform: translateY(8px);
+            box-shadow: 0 0 0 #bbb;
+            filter: brightness(0.9);
+        }
+
+        .tecla:nth-child(1) { background: #ff6b6b; }
+        .tecla:nth-child(2) { background: #ffa94d; }
+        .tecla:nth-child(3) { background: #ffd43b; }
+        .tecla:nth-child(4) { background: #69db7c; }
+        .tecla:nth-child(5) { background: #38d9a9; }
+        .tecla:nth-child(6) { background: #4dabf7; }
+        .tecla:nth-child(7) { background: #748ffc; }
+        .tecla:nth-child(8) { background: #da77f2; }
+        .tecla:nth-child(9) { background: #f783ac; }
+
+        .tecla .nota { display: block; }
+        .tecla .teclado {
+            display: block;
+            font-size: 14px;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+        /* =====================================================
+           ESTRELAS, CONTROLES E INSTRUÇÕES
+        ===================================================== */
+        .estrelas {
+            font-size: clamp(20px, 4vw, 25px);
+            margin-top: 5px;
+            min-height: 35px;
+            flex-shrink: 0;
+        }
+
+        .controles {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+            flex-shrink: 0;
+        }
+
+        button {
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: clamp(14px, 2.5vw, 18px);
+            font-weight: bold;
+            cursor: pointer;
+            color: white;
+            box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+            transition: 0.1s;
+            touch-action: manipulation;
+        }
+
+        button:active {
+            transform: translateY(5px);
+            box-shadow: none;
+        }
+
+        .btn-musica { background: #ff922b; }
+        .btn-parar { background: #fa5252; }
+        .btn-cores { background: #845ef7; }
+
+        .instrucao {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f1f3f5;
+            border-radius: 10px;
+            color: #555;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        /* =====================================================
+           RESPONSIVIDADE: TELEMÓVEL EM PÉ (PORTRAIT)
+        ===================================================== */
+        @media(max-width: 700px) and (orientation: portrait) {
+            body { padding: 0; }
+            .game { 
+                padding: 6px; 
+                border-radius: 0; /* Remove bordas para maximizar o ecrã */
+            }
+
+            .slider-voltar-container { width: 115px; height: 30px; top: 4px; left: 4px; }
+            .slider-voltar-texto { font-size: 8px; padding-left: 16px; }
+            .slider-voltar-botao { width: 22px; height: 22px; font-size: 10px; }
+
+            /* Ocultar elementos não essenciais para salvar espaço vertical */
+            .personagem { display: none; }
+            .subtitulo { display: none; }
+            .instrucao { display: none; }
+            .tecla .teclado { display: none; } /* Ocultar dica de teclado (inútil no telemóvel) */
+
+            h1 { font-size: 24px; padding-top: 36px; margin-bottom: 2px; } /* Espaço para o slider */
+            .nota-atual { min-height: 40px; font-size: 18px; margin-bottom: 5px; }
+            .estrelas { min-height: 25px; font-size: 20px; margin-top: 5px; }
+
+            .piano {
+                justify-content: flex-start; /* Alinha à esquerda caso precise de scroll */
+                padding-bottom: 5px;
+            }
+            .tecla {
+                min-width: 55px; /* Teclas mais finas para caberem no ecrã */
+                font-size: 16px;
+                padding-bottom: 10px;
+                border-width: 2px;
+            }
+
+            .controles { margin-top: 5px; gap: 8px; }
+            button { padding: 10px 15px; font-size: 13px; }
+        }
+
+        /* =====================================================
+           RESPONSIVIDADE: TELEMÓVEL DEITADO (LANDSCAPE)
+        ===================================================== */
+        @media(max-height: 500px) and (orientation: landscape) {
+            body { padding: 0; }
+            .game { padding: 4px; border-radius: 0; }
+            .slider-voltar-container { top: 4px; left: 4px; width: 115px; height: 30px; }
+            .slider-voltar-texto { font-size: 8px; padding-left: 16px; }
+            .slider-voltar-botao { width: 22px; height: 22px; font-size: 10px; }
+
+            .personagem { display: none; }
+            .subtitulo { display: none; }
+            .instrucao { display: none; }
+            .tecla .teclado { display: none; }
+            .estrelas { display: none; } /* Ocultar para dar espaço às teclas */
+
+            h1 { font-size: 20px; margin: 0; padding-left: 120px; text-align: left; }
+            .nota-atual { min-height: 30px; font-size: 16px; margin-bottom: 4px; }
+
+            .piano { padding-bottom: 5px; }
+            .tecla { min-width: 45px; font-size: 14px; padding-bottom: 5px; border-width: 1px; }
+
+            .controles { margin-top: 5px; gap: 5px; }
+            button { padding: 6px 15px; font-size: 11px; box-shadow: 0 3px 0 rgba(0,0,0,0.2); }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="game">
+
+    <!-- BOTÃO DESLIZE PARA VOLTAR -->
+    <div class="slider-voltar-container" id="sliderPista">
+        <span class="slider-voltar-texto">➡️ Deslize p/ Voltar</span>
+        <div class="slider-voltar-botao" id="sliderBotao">
+            ⬅️
+        </div>
+    </div>
+
+    <div class="personagem">🧒🎵</div>
+
+    <h1>🎹 Pianão Infantil 🎹</h1>
+
+    <p class="subtitulo">
+        Toque nas teclas e faça sua própria música!
+    </p>
+
+    <div class="nota-atual" id="notaAtual">
+        👆 Escolha uma tecla!
+    </div>
+
+    <div class="piano">
+        <div class="tecla" data-nota="DÓ" data-frequencia="261.63">
+            <div><span class="nota">DÓ</span><span class="teclado">A</span></div>
+        </div>
+        <div class="tecla" data-nota="RÉ" data-frequencia="293.66">
+            <div><span class="nota">RÉ</span><span class="teclado">S</span></div>
+        </div>
+        <div class="tecla" data-nota="MI" data-frequencia="329.63">
+            <div><span class="nota">MI</span><span class="teclado">D</span></div>
+        </div>
+        <div class="tecla" data-nota="FÁ" data-frequencia="349.23">
+            <div><span class="nota">FÁ</span><span class="teclado">F</span></div>
+        </div>
+        <div class="tecla" data-nota="SOL" data-frequencia="392.00">
+            <div><span class="nota">SOL</span><span class="teclado">G</span></div>
+        </div>
+        <div class="tecla" data-nota="LÁ" data-frequencia="440.00">
+            <div><span class="nota">LÁ</span><span class="teclado">H</span></div>
+        </div>
+        <div class="tecla" data-nota="SI" data-frequencia="493.88">
+            <div><span class="nota">SI</span><span class="teclado">J</span></div>
+        </div>
+        <div class="tecla" data-nota="DÓ" data-frequencia="523.25">
+            <div><span class="nota">DÓ</span><span class="teclado">K</span></div>
+        </div>
+        <div class="tecla" data-nota="RÉ" data-frequencia="587.33">
+            <div><span class="nota">RÉ</span><span class="teclado">L</span></div>
+        </div>
+    </div>
+
+    <div class="estrelas" id="estrelas"></div>
+
+    <div class="controles">
+        <button class="btn-musica" onclick="tocarMusica()">🎵 Tocar música</button>
+        <button class="btn-parar" onclick="pararMusica()">🛑 Parar</button>
+        <button class="btn-cores" onclick="mudarCores()">🌈 Mudar cores</button>
+    </div>
+
+    <div class="instrucao">
+        🎮 <strong>Dica:</strong> também pode usar as teclas
+        <strong>A S D F G H J K L</strong> do teclado do computador!
+    </div>
+
+</div>
+
+<script>
+    let audioContext;
+    let contador = 0;
+    let tocandoMusica = false;
+    let timeoutMusica;
+
+    const teclas = document.querySelectorAll(".tecla");
+
+    const teclasComputador = {
+        "a": 0, "s": 1, "d": 2, "f": 3, "g": 4, 
+        "h": 5, "j": 6, "k": 7, "l": 8
+    };
+
+    function iniciarAudio() {
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioContext.state === "suspended") {
+            audioContext.resume();
+        }
+    }
+
+    function tocarNota(tecla) {
+        iniciarAudio();
+
+        const frequencia = Number(tecla.dataset.frequencia);
+        const nota = tecla.dataset.nota;
+
+        const oscilador = audioContext.createOscillator();
+        const ganho = audioContext.createGain();
+
+        oscilador.type = "sine";
+        oscilador.frequency.value = frequencia;
+
+        ganho.gain.setValueAtTime(0, audioContext.currentTime);
+        ganho.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.02);
+        ganho.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.8);
+
+        oscilador.connect(ganho);
+        ganho.connect(audioContext.destination);
+
+        oscilador.start();
+        oscilador.stop(audioContext.currentTime + 0.8);
+
+        tecla.classList.add("tocando");
+        setTimeout(() => {
+            tecla.classList.remove("tocando");
+        }, 120);
+
+        document.getElementById("notaAtual").innerHTML =
+            "🎵 Tocou a nota: <strong>" + nota + "</strong>";
+
+        contador++;
+        atualizarEstrelas();
+    }
+
+    teclas.forEach(tecla => {
+        tecla.addEventListener("mousedown", () => tocarNota(tecla));
+        tecla.addEventListener("touchstart", function(event) {
+            event.preventDefault();
+            tocarNota(tecla);
+        }, { passive: false });
+    });
+
+    document.addEventListener("keydown", function(event) {
+        if (event.repeat) return;
+        const teclaIndex = teclasComputador[event.key.toLowerCase()];
+        if (teclaIndex !== undefined) {
+            tocarNota(teclas[teclaIndex]);
+        }
+    });
+
+    function atualizarEstrelas() {
+        let estrelas = "";
+        const quantidade = Math.min(5, Math.floor(contador / 5));
+        for (let i = 0; i < quantidade; i++) {
+            estrelas += "⭐";
+        }
+        document.getElementById("estrelas").innerHTML = estrelas;
+    }
+
+    const musica = [0, 0, 4, 4, 5, 5, 4, 3, 3, 2, 2, 1, 1, 0];
+
+    function tocarMusica() {
+        if (tocandoMusica) return;
+        tocandoMusica = true;
+        let indice = 0;
+
+        function proximaNota() {
+            if (indice >= musica.length || !tocandoMusica) {
+                tocandoMusica = false;
+                return;
+            }
+            tocarNota(teclas[musica[indice]]);
+            indice++;
+            timeoutMusica = setTimeout(proximaNota, 500);
+        }
+        proximaNota();
+    }
+
+    function pararMusica() {
+        tocandoMusica = false;
+        clearTimeout(timeoutMusica);
+        document.getElementById("notaAtual").innerHTML = "🛑 Música parada!";
+    }
+
+    function mudarCores() {
+        const cores = [
+            "#ff6b6b", "#ffa94d", "#ffd43b", "#69db7c", 
+            "#38d9a9", "#4dabf7", "#748ffc", "#da77f2", "#f783ac"
+        ];
+        cores.sort(() => Math.random() - 0.5);
+        teclas.forEach((tecla, indice) => {
+            tecla.style.background = cores[indice];
+        });
+    }
+
+/* =====================================================
+   LÓGICA DO SLIDER "DESLIZE PARA VOLTAR"
+===================================================== */
+function voltarPagina() {
+    if (typeof pararMusica === "function") pararMusica();
+
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
+        window.location.href = "index.html";
+    }
+}
+
+const sliderPista = document.getElementById("sliderPista");
+const sliderBotao = document.getElementById("sliderBotao");
+
+let isDragging = false;
+let startX = 0;
+let currentX = 0;
+
+if (sliderBotao && sliderPista) {
+    sliderBotao.addEventListener("pointerdown", function(e) {
+        isDragging = true;
+        startX = e.clientX - currentX;
+        sliderBotao.setPointerCapture(e.pointerId);
+        sliderBotao.style.transition = "none";
+    });
+
+    sliderBotao.addEventListener("pointermove", function(e) {
+        if (!isDragging) return;
+        const maxDrag = sliderPista.clientWidth - sliderBotao.clientWidth - 4;
+        let x = e.clientX - startX;
+        if (x < 0) x = 0;
+        if (x > maxDrag) x = maxDrag;
+        currentX = x;
+        sliderBotao.style.transform = `translateX(${currentX}px)`;
+    });
+
+    function finalizarArrasto(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        const maxDrag = sliderPista.clientWidth - sliderBotao.clientWidth - 4;
+
+        if (currentX >= maxDrag * 0.75) {
+            sliderBotao.style.transform = `translateX(${maxDrag}px)`;
+            voltarPagina();
+            setTimeout(() => {
+                sliderBotao.style.transition = "transform 0.3s ease";
+                sliderBotao.style.transform = "translateX(0px)";
+                currentX = 0;
+            }, 500);
+        } else {
+            sliderBotao.style.transition = "transform 0.3s ease";
+            sliderBotao.style.transform = "translateX(0px)";
+            currentX = 0;
+        }
+    }
+
+    sliderBotao.addEventListener("pointerup", finalizarArrasto);
+    sliderBotao.addEventListener("pointercancel", finalizarArrasto);
+}
+</script>
+</body>
+</html>
