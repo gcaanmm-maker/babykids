@@ -29,9 +29,8 @@
 
 html,
 body {
-    width: 100vw;
-    height: 100vh;
-    height: 100dvh;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
     font-family: Arial, Helvetica, sans-serif;
 }
@@ -43,13 +42,12 @@ body {
 
 body {
     background: linear-gradient(135deg, #7048e8, #a55eea, #48dbfb);
-    width: 100%;
-    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     -webkit-tap-highlight-color: transparent;
+    padding: 10px;
 }
 
 
@@ -66,22 +64,22 @@ body {
 }
 
 .bolha1 {
-    width: 250px;
-    height: 250px;
-    top: -120px;
-    left: -100px;
+    width: 220px;
+    height: 220px;
+    top: -100px;
+    left: -80px;
 }
 
 .bolha2 {
-    width: 320px;
-    height: 320px;
-    right: -150px;
-    bottom: -150px;
+    width: 280px;
+    height: 280px;
+    right: -120px;
+    bottom: -120px;
 }
 
 .bolha3 {
-    width: 100px;
-    height: 100px;
+    width: 90px;
+    height: 90px;
     left: 5%;
     top: 40%;
 }
@@ -94,7 +92,7 @@ body {
 .estrela {
     position: fixed;
     color: white;
-    font-size: 20px;
+    font-size: 18px;
     opacity: .65;
     pointer-events: none;
     animation: brilho 2s infinite alternate;
@@ -114,18 +112,16 @@ body {
 
 
 /* =====================================================
-   CONTAINER PRINCIPAL (OCUPA TELA TODA)
+   CONTAINER PRINCIPAL
 ===================================================== */
 
 .container {
     position: relative;
     z-index: 2;
-    width: 100vw;
-    height: 100vh;
-    height: 100dvh;
-    max-width: 100%;
-    max-height: 100%;
-    padding: clamp(6px, 1.5vh, 20px) clamp(10px, 2vw, 30px);
+    width: 100%;
+    height: 100%;
+    max-width: 1100px;
+    max-height: 750px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -140,12 +136,12 @@ header {
     text-align: center;
     color: white;
     flex-shrink: 0;
-    margin-bottom: clamp(4px, 1vh, 12px);
+    margin-bottom: 6px;
 }
 
 .logo {
-    font-size: clamp(24px, 5vh, 50px);
-    line-height: .85;
+    font-size: clamp(28px, 5vh, 45px);
+    line-height: .9;
     animation: flutuar 3s ease-in-out infinite;
 }
 
@@ -155,28 +151,28 @@ header {
 }
 
 h1 {
-    font-size: clamp(20px, 4.2vh, 40px);
-    line-height: 1;
+    font-size: clamp(22px, 4.5vh, 38px);
+    line-height: 1.1;
     font-weight: 900;
     margin-top: 2px;
     text-shadow: 0 3px 0 rgba(0,0,0,.15);
 }
 
 .subtitulo {
-    font-size: clamp(11px, 2vh, 16px);
+    font-size: clamp(11px, 2vh, 15px);
     font-weight: bold;
     margin-top: 2px;
 }
 
 .frase {
-    font-size: clamp(9px, 1.5vh, 13px);
+    font-size: clamp(9px, 1.5vh, 12px);
     margin-top: 2px;
     opacity: .9;
 }
 
 
 /* =====================================================
-   CARDS (GRADE FLEXÍVEL PARA TELA INTEIRA)
+   CARDS (GRADE FLEXÍVEL)
 ===================================================== */
 
 .cards {
@@ -186,8 +182,7 @@ h1 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(2, 1fr);
-    gap: clamp(8px, 1.5vw, 16px);
-    align-content: center;
+    gap: 10px;
 }
 
 
@@ -205,8 +200,8 @@ h1 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: clamp(6px, 1.2vh, 16px);
-    border-radius: clamp(14px, 2.2vw, 24px);
+    padding: 8px;
+    border-radius: 18px;
     background: white;
     text-decoration: none;
     color: #333;
@@ -215,15 +210,14 @@ h1 {
     transition: transform .2s, box-shadow .2s;
 }
 
-/* brilho de fundo do card */
 .card::before {
     content: "";
     position: absolute;
-    width: 100px;
-    height: 100px;
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
-    top: -50px;
-    right: -35px;
+    top: -45px;
+    right: -30px;
     background: rgba(255,255,255,.4);
 }
 
@@ -242,16 +236,16 @@ h1 {
 ===================================================== */
 
 .icone {
-    width: clamp(45px, 9vh, 95px);
-    height: clamp(45px, 9vh, 95px);
+    width: clamp(42px, 8vh, 75px);
+    height: clamp(42px, 8vh, 75px);
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: clamp(12px, 2.5vh, 26px);
-    font-size: clamp(26px, 5.5vh, 58px);
-    margin-bottom: clamp(2px, 0.8vh, 8px);
-    box-shadow: inset 0 -4px 0 rgba(0,0,0,.10);
+    border-radius: 14px;
+    font-size: clamp(24px, 4.5vh, 45px);
+    margin-bottom: 4px;
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,.10);
 }
 
 
@@ -272,10 +266,10 @@ h1 {
 ===================================================== */
 
 .card h2 {
-    font-size: clamp(13px, 2.4vh, 22px);
-    line-height: 1;
+    font-size: clamp(12px, 2.2vh, 18px);
+    line-height: 1.1;
     font-weight: 900;
-    margin-bottom: clamp(2px, 0.5vh, 4px);
+    margin-bottom: 2px;
 }
 
 
@@ -284,9 +278,9 @@ h1 {
 ===================================================== */
 
 .card p {
-    max-width: 200px;
+    max-width: 180px;
     text-align: center;
-    font-size: clamp(8px, 1.5vh, 12px);
+    font-size: clamp(8px, 1.4vh, 11px);
     line-height: 1.1;
     color: #666;
 }
@@ -297,11 +291,11 @@ h1 {
 ===================================================== */
 
 .abrir {
-    margin-top: clamp(3px, 0.8vh, 8px);
-    padding: clamp(3px, 0.6vh, 6px) clamp(8px, 1.2vw, 15px);
+    margin-top: 4px;
+    padding: 3px 10px;
     border-radius: 50px;
     color: white;
-    font-size: clamp(8px, 1.5vh, 11px);
+    font-size: clamp(8px, 1.4vh, 11px);
     font-weight: bold;
 }
 
@@ -321,36 +315,35 @@ footer {
     flex-shrink: 0;
     text-align: center;
     color: white;
-    font-size: clamp(8px, 1.4vh, 11px);
-    padding-top: clamp(2px, 0.5vh, 6px);
+    font-size: clamp(8px, 1.3vh, 11px);
+    padding-top: 4px;
 }
 
 
 /* =====================================================
-   MODO PAISAGEM / CELULAR DEITADO (OTIMIZAÇÃO PRINCIPAL)
+   MODO PAISAGEM / CELULAR DEITADO
 ===================================================== */
 
 @media (orientation: landscape) {
     .container {
-        padding: 4px 12px;
+        max-width: 900px;
+        max-height: 450px;
     }
 
     header {
-        margin-bottom: 2px;
+        margin-bottom: 4px;
     }
 
     .logo {
-        display: none; /* Oculta a logo grande para ganhar espaço vertical útil */
+        display: none;
     }
 
     h1 {
-        font-size: clamp(18px, 4vh, 32px);
-        margin-top: 0;
+        font-size: clamp(18px, 3.5vh, 26px);
     }
 
     .subtitulo {
-        font-size: clamp(10px, 1.8vh, 14px);
-        margin-top: 1px;
+        font-size: clamp(10px, 1.8vh, 13px);
     }
 
     .frase {
@@ -358,40 +351,40 @@ footer {
     }
 
     .cards {
-        grid-template-columns: repeat(6, 1fr);
-        grid-template-rows: 1fr;
-        gap: clamp(6px, 1vw, 12px);
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: 8px;
     }
 
     .card {
-        padding: 4px;
-        border-radius: 12px;
+        padding: 6px;
+        border-radius: 14px;
     }
 
     .icone {
-        width: clamp(38px, 8vh, 65px);
-        height: clamp(38px, 8vh, 65px);
-        font-size: clamp(22px, 4.5vh, 38px);
+        width: clamp(35px, 7vh, 55px);
+        height: clamp(35px, 7vh, 55px);
+        font-size: clamp(20px, 4vh, 32px);
         margin-bottom: 2px;
     }
 
     .card h2 {
-        font-size: clamp(11px, 2vh, 15px);
-        margin-bottom: 1px;
+        font-size: clamp(11px, 2vh, 14px);
     }
 
     .card p {
-        display: none; /* Esconde subtitulo do card no modo paisagem compacto */
+        display: block; /* Mantém a descrição legível sem sobreposições */
+        font-size: clamp(7px, 1.2vh, 10px);
     }
 
     .abrir {
-        font-size: clamp(7px, 1.3vh, 10px);
-        padding: 2px 6px;
+        font-size: clamp(7px, 1.2vh, 10px);
+        padding: 2px 8px;
         margin-top: 2px;
     }
 
     footer {
-        display: none; /* Oculta rodapé no modo paisagem muito compacto para evitar scroll */
+        display: none;
     }
 }
 
@@ -400,7 +393,7 @@ footer {
    TELAS MUITO PEQUENAS OU BAIXAS
 ===================================================== */
 
-@media (max-height: 450px) {
+@media (max-height: 400px) {
     .logo, .frase, footer {
         display: none;
     }
@@ -410,7 +403,7 @@ footer {
     }
 
     h1 {
-        font-size: 16px;
+        font-size: 15px;
     }
 
     .subtitulo {
