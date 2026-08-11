@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width,
+             initial-scale=1.0,
+             maximum-scale=1.0,
+             user-scalable=no"
+>
+
+<title>🌈 Mundo Kids</title>
+
+<style>
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* =====================================================
+   BODY
+===================================================== */
+
+body {
+    background:
+        linear-gradient(
+            135deg,
+            #7048e8,
+            #a55eea,
+            #48dbfb
+        );
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+    padding: 8px;
+}
+
+
+/* =====================================================
+   DECORAÇÕES
+===================================================== */
+
+.bolha {
+    position: fixed;
+    border-radius: 50%;
+    background: rgba(255,255,255,.12);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.bolha1 {
+    width: 250px;
+    height: 250px;
+    top: -120px;
+    left: -100px;
+}
+
+.bolha2 {
+    width: 320px;
+    height: 320px;
+    right: -150px;
+    bottom: -150px;
+}
+
+.bolha3 {
+    width: 100px;
+    height: 100px;
+    left: 5%;
+    top: 40%;
+}
+
+
+/* =====================================================
+   ESTRELAS
+===================================================== */
+
+.estrela {
+    position: fixed;
+    color: white;
+    font-size: 20px;
+    opacity: .65;
+    pointer-events: none;
+    animation: brilho 2s infinite alternate;
+    z-index: 0;
+}
+
+@keyframes brilho {
+    from {
+        opacity: .3;
+        transform: scale(.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+}
+
+
+/* =====================================================
+   CONTAINER PRINCIPAL
+===================================================== */
+
+.container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    max-width: 1100px;
+    max-height: 720px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+/* =====================================================
+   CABEÇALHO
+===================================================== */
+
+header {
+    text-align: center;
+    color: white;
+    flex-shrink: 0;
+    margin-bottom: 4px;
+}
+
+.logo {
+    font-size: clamp(22px, 4vh, 38px);
+    line-height: .85;
+    animation: flutuar 3s ease-in-out infinite;
+}
+
+@keyframes flutuar {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+h1 {
+    font-size: clamp(18px, 3.5vh, 32px);
+    line-height: 1;
+    font-weight: 900;
+    margin-top: 2px;
+    text-shadow: 0 3px 0 rgba(0,0,0,.15);
+}
+
+.subtitulo {
+    font-size: clamp(10px, 1.6vh, 14px);
+    font-weight: bold;
+    margin-top: 2px;
+}
+
+.frase {
+    font-size: clamp(8px, 1.3vh, 12px);
+    margin-top: 1px;
+    opacity: .9;
+}
+
+
+/* =====================================================
+   CARDS (GRADE BALANCEADA 4x2)
+===================================================== */
+
+.cards {
+    width: 100%;
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 8px;
+    max-width: 950px;
+    margin: 0 auto;
+}
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 16px;
+    text-decoration: none;
+    overflow: hidden;
+    box-shadow: 0 5px 14px rgba(0,0,0,.18);
+    transition: transform .2s, box-shadow .2s;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    top: -40px;
+    right: -30px;
+    background: rgba(255,255,255,.35);
+}
+
+.card:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 22px rgba(0,0,0,.22);
+}
+
+.card:active {
+    transform: scale(.95);
+}
+
+
+/* =====================================================
+   CORES E FUNDOS DOS CARDS
+===================================================== */
+
+.animais { background: #fff3bf; color: #5f370e; }
+.piano { background: #d0ebff; color: #1864ab; }
+.bateria { background: #ffe3e3; color: #c92a2a; }
+.carro { background: #ffec99; color: #e67700; }
+.foguete { background: #e5dbff; color: #5f3dc4; }
+.veiculos { background: #c3fae8; color: #0b7285; }
+.herois { background: #e3fafc; color: #0b7285; }
+
+
+/* =====================================================
+   ÍCONES
+===================================================== */
+
+.icone {
+    width: clamp(32px, 6.5vh, 60px);
+    height: clamp(32px, 6.5vh, 60px);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.75);
+    font-size: clamp(18px, 3.5vh, 34px);
+    margin-bottom: 3px;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,.08);
+}
+
+
+/* =====================================================
+   TÍTULO DO CARD
+===================================================== */
+
+.card h2 {
+    font-size: clamp(11px, 1.9vh, 15px);
+    line-height: 1.1;
+    font-weight: 900;
+    margin-bottom: 1px;
+}
+
+
+/* =====================================================
+   DESCRIÇÃO
+===================================================== */
+
+.card p {
+    max-width: 140px;
+    text-align: center;
+    font-size: clamp(7px, 1.1vh, 10px);
+    line-height: 1.1;
+    opacity: 0.85;
+}
+
+
+/* =====================================================
+   BOTÃO
+===================================================== */
+
+.abrir {
+    margin-top: 3px;
+    padding: 2px 10px;
+    border-radius: 50px;
+    color: white;
+    font-size: clamp(7px, 1.1vh, 10px);
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,.12);
+}
+
+.animais .abrir { background: #f59f00; }
+.piano .abrir { background: #1971c2; }
+.bateria .abrir { background: #e03131; }
+.carro .abrir { background: #f08c00; }
+.foguete .abrir { background: #7048e8; }
+.veiculos .abrir { background: #0ca678; }
+.herois .abrir { background: #1098ad; }
+
+
+/* =====================================================
+   RODAPÉ
+===================================================== */
+
+footer {
+    flex-shrink: 0;
+    text-align: center;
+    color: white;
+    font-size: clamp(8px, 1.3vh, 11px);
+    padding-top: 4px;
+}
+
+
+/* =====================================================
+   MODO PAISAGEM / CELULAR DEITADO
+===================================================== */
+
+@media (orientation: landscape) {
+    .container {
+        max-width: 900px;
+        max-height: 440px;
+    }
+
+    header {
+        margin-bottom: 2px;
+    }
+
+    .logo {
+        display: none;
+    }
+
+    h1 {
+        font-size: clamp(14px, 3vh, 20px);
+    }
+
+    .subtitulo {
+        font-size: clamp(9px, 1.5vh, 12px);
+    }
+
+    .frase {
+        display: none;
+    }
+
+    .cards {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        gap: 6px;
+    }
+
+    .card {
+        padding: 4px;
+        border-radius: 12px;
+    }
+
+    .icone {
+        width: clamp(28px, 5.5vh, 42px);
+        height: clamp(28px, 5.5vh, 42px);
+        font-size: clamp(15px, 2.8vh, 22px);
+        margin-bottom: 2px;
+    }
+
+    .card h2 {
+        font-size: clamp(10px, 1.6vh, 13px);
+    }
+
+    .card p {
+        font-size: clamp(6px, 1vh, 9px);
+    }
+
+    .abrir {
+        font-size: clamp(6px, 1vh, 9px);
+        padding: 2px 6px;
+        margin-top: 2px;
+    }
+
+    footer {
+        display: none;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<!-- DECORAÇÕES -->
+<div class="bolha bolha1"></div>
+<div class="bolha bolha2"></div>
+<div class="bolha bolha3"></div>
+
+<div class="estrela" style="top:8%;left:15%;">⭐</div>
+<div class="estrela" style="top:15%;right:15%;animation-delay:.5s;">✨</div>
+<div class="estrela" style="bottom:15%;right:5%;animation-delay:1s;">⭐</div>
+
+
+<!-- CONTAINER -->
+<main class="container">
+
+    <!-- CABEÇALHO -->
+    <header>
+        <div class="logo">🎮</div>
+        <h1>Mundo Kids</h1>
+        <div class="subtitulo">🌈 Vamos brincar e aprender! 🌈</div>
+        <div class="frase">Escolha uma brincadeira para começar</div>
+    </header>
+
+    <!-- CARDS -->
+    <section class="cards">
+
+        <!-- ANIMAIS -->
+        <a href="animais.html" class="card animais">
+            <div class="icone">🦁</div>
+            <h2>Animais</h2>
+            <p>Conheça os animais!</p>
+            <span class="abrir">▶ Brincar</span>
+        </a>
+
+        <!-- PIANO -->
+        <a href="piano.html" class="card piano">
+            <div class="icone">🎹</div>
+            <h2>Piano</h2>
+            <p>Toque e faça música!</p>
+            <span class="abrir">▶ Tocar</span>
+        </a>
+
+        <!-- BATERIA -->
+        <a href="bateria.html" class="card bateria">
+            <div class="icone">🥁</div>
+            <h2>Bateria</h2>
+            <p>Monte sua batida!</p>
+            <span class="abrir">▶ Tocar</span>
+        </a>
+
+        <!-- CARRO -->
+        <a href="carro.html" class="card carro">
+            <div class="icone">🚗</div>
+            <h2>Carro</h2>
+            <p>Pegue a estrada!</p>
+            <span class="abrir">▶ Jogar</span>
+        </a>
+
+        <!-- FOGUETE -->
+        <a href="foguete.html" class="card foguete">
+            <div class="icone">🚀</div>
+            <h2>Foguete</h2>
+            <p>Viaje pelo espaço!</p>
+            <span class="abrir">▶ Explorar</span>
+        </a>
+
+        <!-- VEÍCULOS -->
+        <a href="veiculos.html" class="card veiculos">
+            <div class="icone">🚒</div>
+            <h2>Veículos</h2>
+            <p>Descubra veículos!</p>
+            <span class="abrir">▶ Descobrir</span>
+        </a>
+
+        <!-- HERÓIS -->
+        <a href="herois.html" class="card herois">
+            <div class="icone">🦸‍♂️</div>
+            <h2>Heróis</h2>
+            <p>Aventura e moedas!</p>
+            <span class="abrir">▶ Jogar</span>
+        </a>
+
+    </section>
+
+    <!-- RODAPÉ -->
+    <footer>
+        🌟 Mundo Kids • Diversão para aprender brincando 🌟
+    </footer>
+
+</main>
+
+</body>
+
+</html>
