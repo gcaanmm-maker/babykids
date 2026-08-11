@@ -29,15 +29,11 @@
 
 html,
 body {
-    width: 100%;
-    height: 100%;
-
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
     overflow: hidden;
-
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 
@@ -46,25 +42,13 @@ body {
 ===================================================== */
 
 body {
-
-    background:
-        linear-gradient(
-            135deg,
-            #7048e8,
-            #a55eea,
-            #48dbfb
-        );
-
-    min-height: 100dvh;
-
+    background: linear-gradient(135deg, #7048e8, #a55eea, #48dbfb);
+    width: 100%;
+    height: 100%;
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     position: relative;
-
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -74,23 +58,16 @@ body {
 ===================================================== */
 
 .bolha {
-
     position: fixed;
-
     border-radius: 50%;
-
-    background:
-        rgba(255,255,255,.12);
-
+    background: rgba(255,255,255,.12);
     pointer-events: none;
-
     z-index: 0;
 }
 
 .bolha1 {
     width: 250px;
     height: 250px;
-
     top: -120px;
     left: -100px;
 }
@@ -98,7 +75,6 @@ body {
 .bolha2 {
     width: 320px;
     height: 320px;
-
     right: -150px;
     bottom: -150px;
 }
@@ -106,7 +82,6 @@ body {
 .bolha3 {
     width: 100px;
     height: 100px;
-
     left: 5%;
     top: 40%;
 }
@@ -117,30 +92,20 @@ body {
 ===================================================== */
 
 .estrela {
-
     position: fixed;
-
     color: white;
-
     font-size: 20px;
-
     opacity: .65;
-
     pointer-events: none;
-
-    animation:
-        brilho 2s infinite alternate;
-
+    animation: brilho 2s infinite alternate;
     z-index: 0;
 }
 
 @keyframes brilho {
-
     from {
         opacity: .3;
         transform: scale(.8);
     }
-
     to {
         opacity: 1;
         transform: scale(1.15);
@@ -149,30 +114,21 @@ body {
 
 
 /* =====================================================
-   CONTAINER PRINCIPAL
+   CONTAINER PRINCIPAL (OCUPA TELA TODA)
 ===================================================== */
 
 .container {
-
     position: relative;
-
     z-index: 2;
-
-    width: 100%;
-
+    width: 100vw;
+    height: 100vh;
     height: 100dvh;
-
-    max-width: 1200px;
-
-    padding:
-        clamp(8px, 2vh, 25px)
-        clamp(8px, 3vw, 25px);
-
+    max-width: 100%;
+    max-height: 100%;
+    padding: clamp(6px, 1.5vh, 20px) clamp(10px, 2vw, 30px);
     display: flex;
-
     flex-direction: column;
-
-    justify-content: center;
+    justify-content: space-between;
 }
 
 
@@ -181,185 +137,103 @@ body {
 ===================================================== */
 
 header {
-
     text-align: center;
-
     color: white;
-
     flex-shrink: 0;
-
-    margin-bottom:
-        clamp(8px, 2vh, 20px);
+    margin-bottom: clamp(4px, 1vh, 12px);
 }
 
 .logo {
-
-    font-size:
-        clamp(32px, 7vh, 70px);
-
+    font-size: clamp(24px, 5vh, 50px);
     line-height: .85;
-
-    animation:
-        flutuar 3s ease-in-out infinite;
+    animation: flutuar 3s ease-in-out infinite;
 }
 
 @keyframes flutuar {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-6px);
-    }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
 }
 
 h1 {
-
-    font-size:
-        clamp(25px, 5vh, 52px);
-
+    font-size: clamp(20px, 4.2vh, 40px);
     line-height: 1;
-
     font-weight: 900;
-
-    margin-top: 5px;
-
-    text-shadow:
-        0 3px 0
-        rgba(0,0,0,.15);
+    margin-top: 2px;
+    text-shadow: 0 3px 0 rgba(0,0,0,.15);
 }
 
 .subtitulo {
-
-    font-size:
-        clamp(12px, 2.3vh, 19px);
-
+    font-size: clamp(11px, 2vh, 16px);
     font-weight: bold;
-
-    margin-top: 5px;
+    margin-top: 2px;
 }
 
 .frase {
-
-    font-size:
-        clamp(9px, 1.8vh, 14px);
-
-    margin-top: 3px;
-
+    font-size: clamp(9px, 1.5vh, 13px);
+    margin-top: 2px;
     opacity: .9;
 }
 
 
 /* =====================================================
-   CARDS
+   CARDS (GRADE FLEXÍVEL PARA TELA INTEIRA)
 ===================================================== */
 
 .cards {
-
     width: 100%;
-
     flex: 1;
-
     min-height: 0;
-
     display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    grid-template-rows:
-        repeat(2, 1fr);
-
-    gap:
-        clamp(7px, 1.5vw, 18px);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: clamp(8px, 1.5vw, 16px);
+    align-content: center;
 }
 
 
 /* =====================================================
-   CARD
+   CARD INDIVIDUAL
 ===================================================== */
 
 .card {
-
     position: relative;
-
+    width: 100%;
+    height: 100%;
     min-width: 0;
     min-height: 0;
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
-
-    padding:
-        clamp(6px, 1.5vw, 18px);
-
-    border-radius:
-        clamp(15px, 2.5vw, 28px);
-
+    padding: clamp(6px, 1.2vh, 16px);
+    border-radius: clamp(14px, 2.2vw, 24px);
     background: white;
-
     text-decoration: none;
-
     color: #333;
-
     overflow: hidden;
-
-    box-shadow:
-        0 8px 20px
-        rgba(0,0,0,.20);
-
-    transition:
-        transform .2s,
-        box-shadow .2s;
+    box-shadow: 0 6px 16px rgba(0,0,0,.18);
+    transition: transform .2s, box-shadow .2s;
 }
 
-
-/* brilho */
-
+/* brilho de fundo do card */
 .card::before {
-
     content: "";
-
     position: absolute;
-
-    width: 120px;
-    height: 120px;
-
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-
-    top: -60px;
-    right: -45px;
-
-    background:
-        rgba(255,255,255,.4);
+    top: -50px;
+    right: -35px;
+    background: rgba(255,255,255,.4);
 }
-
-
-/* hover */
 
 .card:hover {
-
-    transform:
-        translateY(-5px)
-        scale(1.02);
-
-    box-shadow:
-        0 15px 30px
-        rgba(0,0,0,.25);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 25px rgba(0,0,0,.22);
 }
 
-
-/* toque */
-
 .card:active {
-
-    transform: scale(.94);
+    transform: scale(.95);
 }
 
 
@@ -368,63 +242,29 @@ h1 {
 ===================================================== */
 
 .icone {
-
-    width:
-        clamp(55px, 11vh, 115px);
-
-    height:
-        clamp(55px, 11vh, 115px);
-
+    width: clamp(45px, 9vh, 95px);
+    height: clamp(45px, 9vh, 95px);
     flex-shrink: 0;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
-    border-radius:
-        clamp(17px, 3vh, 30px);
-
-    font-size:
-        clamp(34px, 7vh, 68px);
-
-    margin-bottom:
-        clamp(3px, 1vh, 10px);
-
-    box-shadow:
-        inset 0 -6px 0
-        rgba(0,0,0,.10);
+    border-radius: clamp(12px, 2.5vh, 26px);
+    font-size: clamp(26px, 5.5vh, 58px);
+    margin-bottom: clamp(2px, 0.8vh, 8px);
+    box-shadow: inset 0 -4px 0 rgba(0,0,0,.10);
 }
 
 
 /* =====================================================
-   CORES
+   CORES DOS ÍCONES
 ===================================================== */
 
-.animais .icone {
-    background: #ffe066;
-}
-
-.piano .icone {
-    background: #74c0fc;
-}
-
-.bateria .icone {
-    background: #ff8787;
-}
-
-.carro .icone {
-    background: #ff6b6b;
-}
-
-.foguete .icone {
-    background: #b197fc;
-}
-
-.veiculos .icone {
-    background: #63e6be;
-}
+.animais .icone { background: #ffe066; }
+.piano .icone { background: #74c0fc; }
+.bateria .icone { background: #ff8787; }
+.carro .icone { background: #ff6b6b; }
+.foguete .icone { background: #b197fc; }
+.veiculos .icone { background: #63e6be; }
 
 
 /* =====================================================
@@ -432,15 +272,10 @@ h1 {
 ===================================================== */
 
 .card h2 {
-
-    font-size:
-        clamp(14px, 2.7vh, 24px);
-
+    font-size: clamp(13px, 2.4vh, 22px);
     line-height: 1;
-
     font-weight: 900;
-
-    margin-bottom: 4px;
+    margin-bottom: clamp(2px, 0.5vh, 4px);
 }
 
 
@@ -449,66 +284,33 @@ h1 {
 ===================================================== */
 
 .card p {
-
-    max-width: 220px;
-
+    max-width: 200px;
     text-align: center;
-
-    font-size:
-        clamp(8px, 1.8vh, 13px);
-
-    line-height: 1.15;
-
-    color: #777;
+    font-size: clamp(8px, 1.5vh, 12px);
+    line-height: 1.1;
+    color: #666;
 }
 
 
 /* =====================================================
-   BOTÃO
+   BOTÃO DE AÇÃO
 ===================================================== */
 
 .abrir {
-
-    margin-top:
-        clamp(4px, 1vh, 9px);
-
-    padding:
-        clamp(4px, .8vh, 8px)
-        clamp(10px, 1.5vw, 18px);
-
+    margin-top: clamp(3px, 0.8vh, 8px);
+    padding: clamp(3px, 0.6vh, 6px) clamp(8px, 1.2vw, 15px);
     border-radius: 50px;
-
     color: white;
-
-    font-size:
-        clamp(8px, 1.7vh, 12px);
-
+    font-size: clamp(8px, 1.5vh, 11px);
     font-weight: bold;
 }
 
-.animais .abrir {
-    background: #f59f00;
-}
-
-.piano .abrir {
-    background: #1971c2;
-}
-
-.bateria .abrir {
-    background: #e03131;
-}
-
-.carro .abrir {
-    background: #c92a2a;
-}
-
-.foguete .abrir {
-    background: #7048e8;
-}
-
-.veiculos .abrir {
-    background: #087f5b;
-}
+.animais .abrir { background: #f59f00; }
+.piano .abrir { background: #1971c2; }
+.bateria .abrir { background: #e03131; }
+.carro .abrir { background: #c92a2a; }
+.foguete .abrir { background: #7048e8; }
+.veiculos .abrir { background: #087f5b; }
 
 
 /* =====================================================
@@ -516,391 +318,112 @@ h1 {
 ===================================================== */
 
 footer {
-
     flex-shrink: 0;
-
     text-align: center;
-
     color: white;
-
-    font-size:
-        clamp(8px, 1.5vh, 12px);
-
-    padding-top:
-        clamp(5px, 1vh, 10px);
+    font-size: clamp(8px, 1.4vh, 11px);
+    padding-top: clamp(2px, 0.5vh, 6px);
 }
 
 
 /* =====================================================
-   CELULAR
+   MODO PAISAGEM / CELULAR DEITADO (OTIMIZAÇÃO PRINCIPAL)
 ===================================================== */
 
-@media (max-width: 600px) {
-
+@media (orientation: landscape) {
     .container {
-
-        padding:
-            8px;
-
-        justify-content: center;
+        padding: 4px 12px;
     }
-
 
     header {
-
-        margin-bottom: 8px;
-    }
-
-
-    .logo {
-
-        font-size: 32px;
-    }
-
-
-    h1 {
-
-        font-size: 26px;
-
-        margin-top: 3px;
-    }
-
-
-    .subtitulo {
-
-        font-size: 11px;
-
-        margin-top: 3px;
-    }
-
-
-    .frase {
-
-        font-size: 9px;
-
-        margin-top: 2px;
-    }
-
-
-    .cards {
-
-        gap: 7px;
-
-        grid-template-columns:
-            repeat(2, 1fr);
-
-        grid-template-rows:
-            repeat(3, 1fr);
-    }
-
-
-    .card {
-
-        padding: 5px;
-
-        border-radius: 18px;
-    }
-
-
-    .icone {
-
-        width: 58px;
-
-        height: 58px;
-
-        font-size: 34px;
-
-        border-radius: 17px;
-
-        margin-bottom: 4px;
-    }
-
-
-    .card h2 {
-
-        font-size: 15px;
-
         margin-bottom: 2px;
     }
 
-
-    .card p {
-
-        font-size: 8px;
-
-        line-height: 1.1;
-    }
-
-
-    .abrir {
-
-        margin-top: 4px;
-
-        padding:
-            4px 10px;
-
-        font-size: 8px;
-    }
-
-
-    footer {
-
-        font-size: 8px;
-
-        padding-top: 5px;
-    }
-
-}
-
-
-/* =====================================================
-   CELULAR PEQUENO
-===================================================== */
-
-@media (
-    max-width: 380px
-) {
-
-    .container {
-
-        padding: 5px;
-    }
-
-
-    header {
-
-        margin-bottom: 5px;
-    }
-
-
     .logo {
-
-        font-size: 27px;
+        display: none; /* Oculta a logo grande para ganhar espaço vertical útil */
     }
-
 
     h1 {
-
-        font-size: 23px;
+        font-size: clamp(18px, 4vh, 32px);
+        margin-top: 0;
     }
-
 
     .subtitulo {
-
-        font-size: 10px;
+        font-size: clamp(10px, 1.8vh, 14px);
+        margin-top: 1px;
     }
-
 
     .frase {
-
         display: none;
     }
-
 
     .cards {
-
-        gap: 5px;
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-rows: 1fr;
+        gap: clamp(6px, 1vw, 12px);
     }
-
 
     .card {
-
-        border-radius: 15px;
-
         padding: 4px;
+        border-radius: 12px;
     }
-
 
     .icone {
-
-        width: 50px;
-
-        height: 50px;
-
-        font-size: 29px;
-
-        border-radius: 14px;
+        width: clamp(38px, 8vh, 65px);
+        height: clamp(38px, 8vh, 65px);
+        font-size: clamp(22px, 4.5vh, 38px);
+        margin-bottom: 2px;
     }
-
 
     .card h2 {
-
-        font-size: 13px;
+        font-size: clamp(11px, 2vh, 15px);
+        margin-bottom: 1px;
     }
-
 
     .card p {
-
-        font-size: 7px;
+        display: none; /* Esconde subtitulo do card no modo paisagem compacto */
     }
-
 
     .abrir {
-
-        padding:
-            3px 8px;
-
-        font-size: 7px;
+        font-size: clamp(7px, 1.3vh, 10px);
+        padding: 2px 6px;
+        margin-top: 2px;
     }
-
 
     footer {
-
-        display: none;
+        display: none; /* Oculta rodapé no modo paisagem muito compacto para evitar scroll */
     }
-
 }
 
 
 /* =====================================================
-   CELULAR MUITO BAIXO
+   TELAS MUITO PEQUENAS OU BAIXAS
 ===================================================== */
 
-@media (
-    max-height: 650px
-) and (
-    max-width: 600px
-) {
-
-    .logo {
-
+@media (max-height: 450px) {
+    .logo, .frase, footer {
         display: none;
     }
 
-
-    h1 {
-
-        font-size: 23px;
+    header {
+        margin-bottom: 2px;
     }
 
+    h1 {
+        font-size: 16px;
+    }
 
     .subtitulo {
-
         font-size: 9px;
     }
 
-
-    header {
-
-        margin-bottom: 5px;
-    }
-
-
-    .icone {
-
-        width: 48px;
-
-        height: 48px;
-
-        font-size: 28px;
-    }
-
-
-    .card h2 {
-
-        font-size: 12px;
-    }
-
-
     .card p {
-
         display: none;
     }
-
-
-    .abrir {
-
-        margin-top: 3px;
-
-        padding: 3px 8px;
-    }
-
-
-    footer {
-
-        display: none;
-    }
-
-}
-
-
-/* =====================================================
-   CELULAR DEITADO
-===================================================== */
-
-@media (
-    max-height: 500px
-) and (
-    orientation: landscape
-) {
-
-    .container {
-
-        padding: 5px 10px;
-    }
-
-
-    header {
-
-        display: none;
-    }
-
 
     .cards {
-
-        grid-template-columns:
-            repeat(6, 1fr);
-
-        grid-template-rows: 1fr;
-
-        gap: 7px;
+        gap: 6px;
     }
-
-
-    .card {
-
-        border-radius: 14px;
-
-        padding: 4px;
-    }
-
-
-    .icone {
-
-        width: 48px;
-
-        height: 48px;
-
-        font-size: 28px;
-    }
-
-
-    .card h2 {
-
-        font-size: 11px;
-    }
-
-
-    .card p {
-
-        display: none;
-    }
-
-
-    .abrir {
-
-        font-size: 7px;
-
-        padding:
-            3px 7px;
-    }
-
-
-    footer {
-
-        display: none;
-    }
-
 }
 
 </style>
@@ -910,235 +433,84 @@ footer {
 
 <body>
 
-
 <!-- DECORAÇÕES -->
-
 <div class="bolha bolha1"></div>
 <div class="bolha bolha2"></div>
 <div class="bolha bolha3"></div>
 
-<div
-    class="estrela"
-    style="top:8%;left:15%;"
->
-    ⭐
-</div>
-
-<div
-    class="estrela"
-    style="top:15%;right:15%;animation-delay:.5s;"
->
-    ✨
-</div>
-
-<div
-    class="estrela"
-    style="bottom:15%;right:5%;animation-delay:1s;"
->
-    ⭐
-</div>
+<div class="estrela" style="top:8%;left:15%;">⭐</div>
+<div class="estrela" style="top:15%;right:15%;animation-delay:.5s;">✨</div>
+<div class="estrela" style="bottom:15%;right:5%;animation-delay:1s;">⭐</div>
 
 
 <!-- CONTAINER -->
-
 <main class="container">
 
-
     <!-- CABEÇALHO -->
-
     <header>
-
-        <div class="logo">
-            🎮
-        </div>
-
-        <h1>
-            Mundo Kids
-        </h1>
-
-        <div class="subtitulo">
-            🌈 Vamos brincar e aprender! 🌈
-        </div>
-
-        <div class="frase">
-            Escolha uma brincadeira para começar
-        </div>
-
+        <div class="logo">🎮</div>
+        <h1>Mundo Kids</h1>
+        <div class="subtitulo">🌈 Vamos brincar e aprender! 🌈</div>
+        <div class="frase">Escolha uma brincadeira para começar</div>
     </header>
 
-
     <!-- CARDS -->
-
     <section class="cards">
 
-
         <!-- ANIMAIS -->
-
-        <a
-            href="animais.html"
-            class="card animais"
-        >
-
-            <div class="icone">
-                🦁
-            </div>
-
-            <h2>
-                Animais
-            </h2>
-
-            <p>
-                Conheça os animais e seus sons!
-            </p>
-
-            <span class="abrir">
-                ▶ Brincar
-            </span>
-
+        <a href="animais.html" class="card animais">
+            <div class="icone">🦁</div>
+            <h2>Animais</h2>
+            <p>Conheça os animais e seus sons!</p>
+            <span class="abrir">▶ Brincar</span>
         </a>
-
 
         <!-- PIANO -->
-
-        <a
-            href="piano2.html"
-            class="card piano"
-        >
-
-            <div class="icone">
-                🎹
-            </div>
-
-            <h2>
-                Piano
-            </h2>
-
-            <p>
-                Toque as teclas e faça música!
-            </p>
-
-            <span class="abrir">
-                ▶ Tocar
-            </span>
-
+        <a href="piano.html" class="card piano">
+            <div class="icone">🎹</div>
+            <h2>Piano</h2>
+            <p>Toque as teclas e faça música!</p>
+            <span class="abrir">▶ Tocar</span>
         </a>
-
 
         <!-- BATERIA -->
-
-        <a
-            href="bateria.html"
-            class="card bateria"
-        >
-
-            <div class="icone">
-                🥁
-            </div>
-
-            <h2>
-                Bateria
-            </h2>
-
-            <p>
-                Monte sua batida e toque!
-            </p>
-
-            <span class="abrir">
-                ▶ Tocar
-            </span>
-
+        <a href="bateria.html" class="card bateria">
+            <div class="icone">🥁</div>
+            <h2>Bateria</h2>
+            <p>Monte sua batida e toque!</p>
+            <span class="abrir">▶ Tocar</span>
         </a>
-
 
         <!-- CARRO -->
-
-        <a
-            href="carro.html"
-            class="card carro"
-        >
-
-            <div class="icone">
-                🚗
-            </div>
-
-            <h2>
-                Carro
-            </h2>
-
-            <p>
-                Pegue a estrada e acelere!
-            </p>
-
-            <span class="abrir">
-                ▶ Jogar
-            </span>
-
+        <a href="carro.html" class="card carro">
+            <div class="icone">🚗</div>
+            <h2>Carro</h2>
+            <p>Pegue a estrada e acelere!</p>
+            <span class="abrir">▶ Jogar</span>
         </a>
-
 
         <!-- FOGUETE -->
-
-        <a
-            href="foguete.html"
-            class="card foguete"
-        >
-
-            <div class="icone">
-                🚀
-            </div>
-
-            <h2>
-                Foguete
-            </h2>
-
-            <p>
-                Vamos viajar pelo espaço!
-            </p>
-
-            <span class="abrir">
-                ▶ Explorar
-            </span>
-
+        <a href="foguete.html" class="card foguete">
+            <div class="icone">🚀</div>
+            <h2>Foguete</h2>
+            <p>Vamos viajar pelo espaço!</p>
+            <span class="abrir">▶ Explorar</span>
         </a>
-
 
         <!-- VEÍCULOS -->
-
-        <a
-            href="veiculos.html"
-            class="card veiculos"
-        >
-
-            <div class="icone">
-                🚒
-            </div>
-
-            <h2>
-                Veículos
-            </h2>
-
-            <p>
-                Descubra veículos e seus sons!
-            </p>
-
-            <span class="abrir">
-                ▶ Descobrir
-            </span>
-
+        <a href="veiculos.html" class="card veiculos">
+            <div class="icone">🚒</div>
+            <h2>Veículos</h2>
+            <p>Descubra veículos e seus sons!</p>
+            <span class="abrir">▶ Descobrir</span>
         </a>
-
 
     </section>
 
-
     <!-- RODAPÉ -->
-
     <footer>
-
         🌟 Mundo Kids • Diversão para aprender brincando 🌟
-
     </footer>
-
 
 </main>
 
