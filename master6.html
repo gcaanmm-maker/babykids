@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Estágio - Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @media print {
+            body * { visibility: hidden; }
+            #area-impressao, #area-impressao * { visibility: visible; }
+            #area-impressao {
+                position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 20px;
+                background: white; box-shadow: none;
+            }
+            .no-print { display: none !important; }
+            .modal-bg { background: transparent !important; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    
+    <!-- Notificações -->
+    <div id="notification" class="fixed top-4 right-4 z-50 transform transition-transform duration-300 translate-x-full no-print">
+        <div class="bg-green-500 text-white px-6 py-3 rounded shadow-lg flex items-center gap-2">
+            <i class="fas fa-check-circle"></i><span id="notification-msg">Sucesso!</span>
+        </div>
+    </div>
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Menu Lateral -->
+        <aside class="w-64 bg-blue-900 text-white flex flex-col no-print">
+            <div class="p-4 border-b border-blue-800">
+                <h1 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-user-nurse"></i> Escola Técnica</h1>
+                <p class="text-xs text-blue-300 mt-1">Admin</p>
+            </div>
+            <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+                <button onclick="switchTab('dashboard')" id="btn-dashboard" class="w-full flex items-center gap-3 px-4 py-2 rounded bg-blue-800 hover:bg-blue-700 transition"><i class="fas fa-chart-line w-5"></i> Dashboard</button>
+                <button onclick="switchTab('preceptores')" id="btn-preceptores" class="w-full flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-800 transition"><i class="fas fa-user-md w-5"></i> Preceptores</button>
+                <button onclick="switchTab('turmas')" id="btn-turmas" class="w-full flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-800 transition"><i class="fas fa-users-class w-5"></i> Turmas Ativas</button>
+                <button onclick="switchTab('finalizadas')" id="btn-finalizadas" class="w-full flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-800 transition"><i class="fas fa-flag-checkered w-5"></i> Histórico</button>
+                <button onclick="switchTab('alunos')" id="btn-alunos" class="w-full flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-800 transition"><i class="fas fa-user-graduate w-5"></i> Alunos</button>
+                <button onclick="switchTab('galeria')" id="btn-galeria" class="w-full flex items-center gap-3 px-4 py-2 rounded hover:bg-blue-800 transition"><i class="fas fa-camera-retro w-5"></i> Galeria</button>
+            </nav>
+            <div class="p-4 border-t border-blue-800">
+                <button onclick="limparSistema()" class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-sm font-bold shadow transition">
+                    <i class="fas fa-trash-alt"></i> Resetar Testes
+                </button>
+            </div>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 overflow-y-auto p-8 no-print">
+            
+            <!-- DASHBOARD -->
+            <div id="tab-dashboard" class="block">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Visão Geral</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-900">
+                        <p class="text-gray-500 text-sm font-semibold">Preceptores</p><h3 class="text-3xl font-bold text-blue-900 mt-1" id="dash-preceptores">0</h3>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-green-500">
+                        <p class="text-gray-500 text-sm font-semibold">Turmas</p><h3 class="text-3xl font-bold text-green-600 mt-1" id="dash-turmas">0</h3>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-purple-500">
+                        <p class="text-gray-500 text-sm font-semibold">Alunos</p><h3 class="text-3xl font-bold text-purple-600 mt-1" id="dash-alunos">0</h3>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border lg:col-span-2">
+                        <h3 class="text-lg font-bold text-gray-700 mb-4">Frequência Média (%)</h3>
+                        <div class="relative h-64 w-full"><canvas id="graficoFrequencia"></canvas></div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border border-red-200">
+                        <h3 class="text-md font-bold text-red-600 mb-3"><i class="fas fa-exclamation-triangle"></i> Alunos em Risco (< 75%)</h3>
+                        <ul id="lista-risco" class="space-y-2 h-60 overflow-y-auto text-sm divide-y"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TURMAS ATIVAS -->
+            <div id="tab-turmas" class="hidden">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Gerenciar Turmas Ativas</h2>
+                <div class="bg-white p-6 rounded-lg shadow-sm border mb-6">
+                    <form id="form-turma" class="grid grid-cols-1 md:grid-cols-4 gap-4" onsubmit="event.preventDefault(); saveTurma();">
+                        <div class="md:col-span-2"><label class="text-xs font-bold text-gray-600">Nome da Turma</label><input type="text" id="turma-nome" required class="w-full p-2 border rounded"></div>
+                        <div><label class="text-xs font-bold text-gray-600">Preceptor</label><select id="turma-preceptor" required class="w-full p-2 border rounded"></select></div>
+                        <div><label class="text-xs font-bold text-gray-600">Turno</label><select id="turma-turno" class="w-full p-2 border rounded"><option>Manhã</option><option>Tarde</option><option>Noite</option><option>Integral</option></select></div>
+                        
+                        <div><label class="text-xs font-bold text-gray-600">Início do Estágio</label><input type="date" id="turma-inicio" required class="w-full p-2 border rounded"></div>
+                        <div><label class="text-xs font-bold text-gray-600">Fim do Estágio</label><input type="date" id="turma-fim" required class="w-full p-2 border rounded"></div>
+                        
+                        <div class="md:col-span-2"><label class="text-xs font-bold text-gray-600">Dias de Aula</label>
+                            <div class="flex gap-3 mt-1 text-sm">
+                                <label><input type="checkbox" name="diasAula" value="Seg"> Seg</label>
+                                <label><input type="checkbox" name="diasAula" value="Ter"> Ter</label>
+                                <label><input type="checkbox" name="diasAula" value="Qua"> Qua</label>
+                                <label><input type="checkbox" name="diasAula" value="Qui"> Qui</label>
+                                <label><input type="checkbox" name="diasAula" value="Sex"> Sex</label>
+                            </div>
+                        </div>
+                        <div class="md:col-span-4 flex justify-end"><button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded font-bold hover:bg-blue-700">Criar Turma</button></div>
+                    </form>
+                </div>
+                
+                <input type="text" id="search-turma" oninput="renderTurmas()" placeholder="Buscar turma..." class="w-full p-2 border rounded mb-4 shadow-sm">
+                <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
+                    <table class="w-full text-left"><thead class="bg-gray-50 border-b"><tr><th class="p-4">Turma (Turno)</th><th class="p-4">Período</th><th class="p-4">Preceptor</th><th class="p-4 text-right">Ações</th></tr></thead><tbody id="list-turmas" class="divide-y"></tbody></table>
+                </div>
+            </div>
+
+            <!-- TURMAS FIN. -->
+            <div id="tab-finalizadas" class="hidden">
+                <h2 class="text-2xl font-bold mb-6">Turmas Finalizadas</h2>
+                <div class="bg-white rounded border overflow-hidden">
+                    <table class="w-full text-left"><thead class="bg-gray-50 border-b"><tr><th class="p-4">Turma</th><th class="p-4">Preceptor</th><th class="p-4 text-right">Ações</th></tr></thead><tbody id="list-turmas-finalizadas" class="divide-y"></tbody></table>
+                </div>
+            </div>
+
+            <!-- ALUNOS -->
+            <div id="tab-alunos" class="hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Gerenciar Alunos</h2>
+                    <button onclick="exportarCSVAlunos()" class="bg-green-600 text-white px-4 py-2 rounded text-sm font-bold shadow hover:bg-green-700"><i class="fas fa-file-excel mr-1"></i> Exportar CSV</button>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border mb-6">
+                    <h3 class="font-bold text-gray-700 mb-2">Adicionar Individualmente</h3>
+                    <form id="form-aluno" class="flex gap-4 mb-4 border-b pb-4" onsubmit="event.preventDefault(); saveAluno();">
+                        <input type="text" id="aluno-nome" required placeholder="Nome do Aluno" class="flex-1 p-2 border rounded">
+                        <select id="aluno-turma" required class="flex-1 p-2 border rounded"></select>
+                        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded font-bold hover:bg-blue-700">Cadastrar</button>
+                    </form>
+                    
+                    <h3 class="font-bold text-gray-700 mb-2 mt-4 text-sm">Importação em Lote (Arquivo Excel/CSV)</h3>
+                    <div class="flex gap-4 items-center">
+                        <select id="import-turma" class="p-2 border rounded w-1/3"></select>
+                        <input type="file" id="file-csv" accept=".csv" class="flex-1 p-1 border rounded text-sm">
+                        <button onclick="importarCSV()" class="bg-purple-600 text-white px-4 py-2 rounded text-sm font-bold hover:bg-purple-700">Importar Lista</button>
+                    </div>
+                </div>
+                
+                <div class="flex gap-2 mb-4">
+                    <input type="text" id="search-aluno" oninput="mudarPagina(1)" placeholder="Buscar aluno..." class="flex-1 p-2 border rounded shadow-sm">
+                    <select id="filter-turno" onchange="mudarPagina(1)" class="p-2 border rounded shadow-sm"><option value="">Todos os Turnos</option><option value="Manhã">Manhã</option><option value="Tarde">Tarde</option><option value="Noite">Noite</option><option value="Integral">Integral</option></select>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
+                    <table class="w-full text-left"><thead class="bg-gray-50 border-b"><tr><th class="p-4">Nome</th><th class="p-4">Turma Atual</th><th class="p-4 text-right">Ações</th></tr></thead><tbody id="list-alunos" class="divide-y"></tbody></table>
+                    <div class="p-4 border-t bg-gray-50 flex justify-between items-center text-sm">
+                        <span id="page-info" class="text-gray-600">Mostrando 1 a 15 de X</span>
+                        <div class="flex gap-2">
+                            <button onclick="mudarPagina(currentPage - 1)" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Anterior</button>
+                            <button onclick="mudarPagina(currentPage + 1)" class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Próxima</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRECEPTORES -->
+            <div id="tab-preceptores" class="hidden">
+                <h2 class="text-2xl font-bold mb-6">Preceptores</h2>
+                <div class="bg-white p-6 rounded-lg shadow-sm border mb-6">
+                    <form id="form-preceptor" class="flex gap-4" onsubmit="event.preventDefault(); savePreceptor();">
+                        <input type="text" id="prec-nome" required placeholder="Nome" class="flex-1 p-2 border rounded">
+                        <input type="text" id="prec-login" required placeholder="Login" class="flex-1 p-2 border rounded">
+                        <input type="password" id="prec-senha" required placeholder="Senha" class="flex-1 p-2 border rounded">
+                        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded font-bold">Cadastrar</button>
+                    </form>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm border overflow-hidden">
+                    <table class="w-full text-left"><thead class="bg-gray-50 border-b"><tr><th class="p-4">Nome</th><th class="p-4">Login</th><th class="p-4 text-right">Ações</th></tr></thead><tbody id="list-preceptores" class="divide-y"></tbody></table>
+                </div>
+            </div>
+
+            <!-- GALERIA -->
+            <div id="tab-galeria" class="hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Galeria</h2>
+                    <button onclick="carregarGaleria()" class="bg-blue-100 text-blue-700 px-4 py-2 rounded">Atualizar</button>
+                </div>
+                <div id="grid-galeria" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+            </div>
+            
+        </main>
+    </div>
+
+    <!-- MODAL RELATÓRIO/IMPRESSÃO -->
+    <div id="modal-container" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-bg bg-black bg-opacity-50">
+        <div id="area-impressao" class="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
+            <div class="flex justify-between items-center p-6 border-b no-print">
+                <h3 class="text-xl font-bold text-gray-800" id="modal-titulo">Relatório</h3>
+                <div class="flex gap-4">
+                    <button onclick="window.print()" class="bg-blue-600 text-white px-4 py-2 rounded font-bold shadow"><i class="fas fa-print"></i> PDF / Imprimir</button>
+                    <button onclick="document.getElementById('modal-container').classList.replace('flex','hidden')" class="text-gray-500 text-2xl">&times;</button>
+                </div>
+            </div>
+            <div class="p-6 overflow-y-auto flex-1 text-gray-800" id="modal-conteudo"></div>
+        </div>
+    </div>
+
+    <script>
+        // ================= VARIÁVEIS GLOBAIS =================
+        let preceptores = JSON.parse(localStorage.getItem('estagio_preceptores')) || [];
+        let turmas = JSON.parse(localStorage.getItem('estagio_turmas')) || [];
+        let alunos = JSON.parse(localStorage.getItem('estagio_alunos')) || [];
+        let chartInstance = null;
+        let currentPage = 1;
+        const itemsPerPage = 15;
+
+        // ================= INICIALIZAÇÃO =================
+        function init() { 
+            renderPreceptores(); 
+            renderTurmas(); 
+            mudarPagina(1); 
+            updateSelects(); 
+            updateDashboard(); 
+        }
+
+        // Função de Limpar Sistema (Testes)
+        function limparSistema() {
+            if(confirm("ATENÇÃO: Isso apagará TODOS os dados do sistema (Alunos, Turmas, Frequências, Fotos).\n\nDeseja continuar?")) {
+                localStorage.clear();
+                window.location.reload();
+            }
+        }
+        
+        function switchTab(tabId) {
+            ['dashboard', 'preceptores', 'turmas', 'finalizadas', 'alunos', 'galeria'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.replace('block','hidden');
+                document.getElementById(`btn-${t}`).classList.remove('bg-blue-800');
+            });
+            document.getElementById(`tab-${tabId}`).classList.replace('hidden','block');
+            document.getElementById(`btn-${tabId}`).classList.add('bg-blue-800');
+            
+            if(tabId === 'galeria') carregarGaleria(); 
+            if(tabId === 'dashboard') updateDashboard();
+        }
+
+        function showNotification(msg) {
+            const notif = document.getElementById('notification');
+            document.getElementById('notification-msg').innerText = msg;
+            notif.classList.remove('translate-x-full');
+            setTimeout(() => notif.classList.add('translate-x-full'), 3000);
+        }
+
+        function updateSelects() {
+            let pOpts = '<option value="">Selecione...</option>';
+            preceptores.forEach(p => pOpts += `<option value="${p.id}">${p.nome}</option>`);
+            document.getElementById('turma-preceptor').innerHTML = pOpts;
+            
+            let tOpts = '<option value="">Selecione...</option>';
+            turmas.filter(t => t.status !== 'finalizada').forEach(t => tOpts += `<option value="${t.id}">${t.nome} (${t.turno||'-'})</option>`);
+            document.getElementById('aluno-turma').innerHTML = tOpts;
+            document.getElementById('import-turma').innerHTML = tOpts;
+        }
+
+        // ================= PRECEPTORES =================
+        function savePreceptor() {
+            preceptores.push({ 
+                id: Date.now().toString(), 
+                nome: document.getElementById('prec-nome').value, 
+                login: document.getElementById('prec-login').value, 
+                senha: document.getElementById('prec-senha').value 
+            });
+            localStorage.setItem('estagio_preceptores', JSON.stringify(preceptores));
+            document.getElementById('form-preceptor').reset();
+            init(); showNotification('Preceptor Cadastrado!');
+        }
+
+        function renderPreceptores() {
+            document.getElementById('list-preceptores').innerHTML = preceptores.map(p => `
+                <tr class="hover:bg-gray-50">
+                    <td class="p-4">${p.nome}</td><td class="p-4">${p.login}</td>
+                    <td class="p-4 text-right"><button onclick="deletar('prec', '${p.id}')" class="text-red-500"><i class="fas fa-trash"></i></button></td>
+                </tr>
+            `).join('') || '<tr><td colspan="3" class="p-4 text-center">Nenhum cadastrado</td></tr>';
+        }
+
+        // ================= TURMAS =================
+        function saveTurma() {
+            let chks = document.querySelectorAll('input[name="diasAula"]:checked');
+            let dias = Array.from(chks).map(c => c.value);
+            turmas.push({ 
+                id: Date.now().toString(), 
+                nome: document.getElementById('turma-nome').value, 
+                preceptorId: document.getElementById('turma-preceptor').value, 
+                turno: document.getElementById('turma-turno').value, 
+                inicio: document.getElementById('turma-inicio').value, 
+                fim: document.getElementById('turma-fim').value,
+                dias: dias, 
+                status: 'ativa' 
+            });
+            localStorage.setItem('estagio_turmas', JSON.stringify(turmas)); 
+            document.getElementById('form-turma').reset();
+            init(); showNotification('Turma Cadastrada!');
+        }
+
+        function renderTurmas() {
+            let term = (document.getElementById('search-turma')?.value || '').toLowerCase();
+            let htmlAtivas = '', htmlFin = '';
+            
+            turmas.forEach(t => {
+                let p = preceptores.find(pr => pr.id === t.preceptorId);
+                let row = `<tr>
+                    <td class="p-4 font-bold">${t.nome} <br><span class="text-xs font-normal text-gray-500">${t.turno||'-'} | ${t.dias ? t.dias.join(', '):''}</span></td>
+                    <td class="p-4 text-xs">${formatData(t.inicio)} a ${formatData(t.fim)}</td>
+                    <td class="p-4">${p?p.nome:'-'}</td>
+                    <td class="p-4 text-right">
+                        <button onclick="abrirRelatorioTurma('${t.id}')" class="text-blue-600 mx-1"><i class="fas fa-list"></i></button>
+                        ${t.status !== 'finalizada' ? `<button onclick="altTurma('${t.id}', 'finalizada')" class="text-orange-500 mx-1" title="Finalizar"><i class="fas fa-flag-checkered"></i></button>` : `<button onclick="altTurma('${t.id}', 'ativa')" class="text-green-500 mx-1" title="Reabrir"><i class="fas fa-undo"></i></button>`}
+                        <button onclick="deletar('turma', '${t.id}')" class="text-red-500 mx-1"><i class="fas fa-trash"></i></button>
+                    </td></tr>`;
+                
+                if(t.nome.toLowerCase().includes(term)) { 
+                    if(t.status === 'finalizada') htmlFin += row; else htmlAtivas += row; 
+                }
+            });
+            document.getElementById('list-turmas').innerHTML = htmlAtivas || '<tr><td colspan="4" class="p-4 text-center">Nenhuma turma ativa</td></tr>'; 
+            document.getElementById('list-turmas-finalizadas').innerHTML = htmlFin || '<tr><td colspan="4" class="p-4 text-center">Nenhuma turma finalizada</td></tr>';
+        }
+
+        function altTurma(id, status) {
+            turmas.find(t => t.id === id).status = status;
+            localStorage.setItem('estagio_turmas', JSON.stringify(turmas));
+            init();
+        }
+
+        // ================= ALUNOS =================
+        function saveAluno() {
+            alunos.push({ id: Date.now().toString(), nome: document.getElementById('aluno-nome').value, turmaId: document.getElementById('aluno-turma').value });
+            localStorage.setItem('estagio_alunos', JSON.stringify(alunos)); 
+            document.getElementById('form-aluno').reset();
+            init(); showNotification('Aluno Cadastrado!');
+        }
+
+        function mudarPagina(page) {
+            let term = (document.getElementById('search-aluno')?.value || '').toLowerCase();
+            let turnoFiltro = document.getElementById('filter-turno')?.value || '';
+            
+            let filtered = alunos.filter(a => {
+                let t = turmas.find(tr => tr.id === a.turmaId);
+                let matchTurno = turnoFiltro ? (t && t.turno === turnoFiltro) : true;
+                return (a.nome.toLowerCase().includes(term) || (t && t.nome.toLowerCase().includes(term))) && matchTurno;
+            });
+
+            const maxPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+            if(page < 1) page = 1; if(page > maxPages) page = maxPages;
+            currentPage = page;
+
+            let start = (currentPage - 1) * itemsPerPage;
+            let currentItems = filtered.slice(start, start + itemsPerPage);
+
+            document.getElementById('list-alunos').innerHTML = currentItems.map(a => {
+                let t = turmas.find(tr => tr.id === a.turmaId);
+                return `<tr><td class="p-4">${a.nome}</td><td class="p-4">${t?t.nome:'-'}</td><td class="p-4 text-right">
+                    <button onclick="abrirRelatorioAluno('${a.id}')" class="text-blue-600 mx-2"><i class="fas fa-chart-bar"></i></button>
+                    <button onclick="deletar('aluno', '${a.id}')" class="text-red-500 mx-2"><i class="fas fa-trash"></i></button>
+                </td></tr>`;
+            }).join('') || '<tr><td colspan="3" class="p-4 text-center">Nenhum aluno encontrado</td></tr>';
+            
+            document.getElementById('page-info').innerText = `Mostrando ${filtered.length===0?0:start+1} a ${Math.min(start+itemsPerPage, filtered.length)} de ${filtered.length}`;
+        }
+
+        // ================= IMPORT / EXPORT =================
+        function importarCSV() {
+            const tId = document.getElementById('import-turma').value;
+            const file = document.getElementById('file-csv').files[0];
+            if(!tId) return alert('Selecione uma turma!');
+            if(!file) return alert('Selecione um arquivo .csv');
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const lines = e.target.result.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+                lines.forEach(nome => alunos.push({ id: Date.now().toString()+Math.random().toString().slice(2,6), nome, turmaId: tId }));
+                localStorage.setItem('estagio_alunos', JSON.stringify(alunos));
+                init(); document.getElementById('file-csv').value = '';
+                alert(`${lines.length} alunos importados com sucesso!`);
+            };
+            reader.readAsText(file);
+        }
+
+        function exportarCSVAlunos() {
+            let csv = "Nome,Turma Atual,Frequencia Global,Horas Presentes\n";
+            alunos.forEach(a => {
+                let t = turmas.find(tr => tr.id === a.turmaId);
+                let fCalc = calcularFrequenciaAluno(a.id);
+                csv += `${a.nome},${t?t.nome:'-'},${fCalc.percent}%,${fCalc.pres}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob); link.download = "relatorio_alunos.csv"; link.click();
+        }
+
+        // ================= CÁLCULOS E DASHBOARD =================
+        function calcularFrequenciaAluno(alunoId) {
+            let freqs = JSON.parse(localStorage.getItem('estagio_frequencias')) || {};
+            let pos = 0, pres = 0;
+            Object.keys(freqs).forEach(tId => { 
+                Object.values(freqs[tId]).forEach(dia => {
+                    let reg = dia[alunoId];
+                    if(reg && reg.some(v => v === 'P' || v === 'F')) { pos += 5; pres += reg.filter(v => v === 'P').length; }
+                });
+            });
+            return { pos, pres, percent: pos > 0 ? ((pres/pos)*100).toFixed(1) : 0 };
+        }
+
+        function updateDashboard() {
+            document.getElementById('dash-preceptores').innerText = preceptores.length;
+            document.getElementById('dash-turmas').innerText = turmas.length;
+            document.getElementById('dash-alunos').innerText = alunos.length;
+
+            let labels = [], dados = [], cores = [];
+            let htmlRisco = '';
+
+            alunos.forEach(a => {
+                let fCalc = calcularFrequenciaAluno(a.id);
+                if(fCalc.pos > 0 && fCalc.percent < 75) {
+                    htmlRisco += `<li class="py-2"><span class="font-bold">${a.nome}</span> - <span class="text-red-600 font-bold">${fCalc.percent}%</span></li>`;
+                }
+            });
+            document.getElementById('lista-risco').innerHTML = htmlRisco || '<li class="py-2 text-gray-500 text-center">Nenhum aluno em risco</li>';
+
+            turmas.forEach(t => {
+                let posT = 0, presT = 0;
+                alunos.filter(a => a.turmaId === t.id).forEach(a => {
+                    let f = calcularFrequenciaAluno(a.id); posT += f.pos; presT += f.pres;
+                });
+                let perc = posT > 0 ? ((presT/posT)*100).toFixed(1) : 0;
+                labels.push(t.nome); dados.push(perc);
+                cores.push(posT===0 ? '#E5E7EB' : (perc >= 75 ? 'rgba(59,130,246,0.8)' : 'rgba(239,68,68,0.8)'));
+            });
+            if(chartInstance) chartInstance.destroy();
+            chartInstance = new Chart(document.getElementById('graficoFrequencia').getContext('2d'), {
+                type: 'bar', data: { labels: labels, datasets: [{ data: dados, backgroundColor: cores }] },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { max: 100 } }, plugins: { legend: { display: false } } }
+            });
+        }
+
+        // ================= RELATÓRIOS (MODAL) =================
+        function abrirRelatorioAluno(id) {
+            let aluno = alunos.find(a => a.id === id); let turmaAtual = turmas.find(t => t.id === aluno.turmaId);
+            document.getElementById('modal-titulo').innerText = "Boletim de Estágio";
+            let fCalc = calcularFrequenciaAluno(id);
+            
+            let freqs = JSON.parse(localStorage.getItem('estagio_frequencias')) || {};
+            let obsDb = JSON.parse(localStorage.getItem('estagio_observacoes')) || {};
+            let freqArray = []; 
+            
+            Object.keys(freqs).forEach(tId => {
+                Object.keys(freqs[tId]).forEach(data => {
+                    let h = freqs[tId][data][id];
+                    let obsStr = obsDb[tId] && obsDb[tId][data] ? (obsDb[tId][data][id] || '') : '';
+                    if(h && h.some(v => v !== '')) freqArray.push({ data, p: h, obs: obsStr });
+                });
+            });
+
+            freqArray.sort((a,b) => new Date(a.data) - new Date(b.data));
+            let tbodyF = '';
+            freqArray.forEach(f => {
+                tbodyF += `<tr class="border-b">
+                    <td class="p-2 whitespace-nowrap">${formatData(f.data)}</td>
+                    <td class="p-2 text-center ${f.p[0]==='F'?'text-red-500':''}">${f.p[0]}</td><td class="p-2 text-center ${f.p[1]==='F'?'text-red-500':''}">${f.p[1]}</td>
+                    <td class="p-2 text-center ${f.p[2]==='F'?'text-red-500':''}">${f.p[2]}</td><td class="p-2 text-center ${f.p[3]==='F'?'text-red-500':''}">${f.p[3]}</td>
+                    <td class="p-2 text-center ${f.p[4]==='F'?'text-red-500':''}">${f.p[4]}</td>
+                    <td class="p-2 text-xs italic text-gray-600">${f.obs}</td>
+                </tr>`;
+            });
+
+            document.getElementById('modal-conteudo').innerHTML = `
+                <div class="mb-4"><h2 class="text-2xl font-bold">${aluno.nome}</h2><p>Turma: ${turmaAtual?turmaAtual.nome:'-'}</p></div>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-blue-50 border p-4 rounded text-center"><span class="text-sm font-bold">Frequência Global</span><div class="text-3xl text-blue-900">${fCalc.percent}%</div></div>
+                    <div class="bg-green-50 border p-4 rounded text-center"><span class="text-sm font-bold">Carga Horária Prática</span><div class="text-3xl text-green-900">${fCalc.pres} horas</div></div>
+                </div>
+                <h4 class="font-bold border-b pb-2 mb-2">Diário de Bordo (Frequência e Anotações)</h4>
+                <table class="w-full text-sm border"><thead class="bg-gray-100"><tr><th class="p-2 text-left">Data</th><th colspan="5" class="p-2">Horas (1ª a 5ª)</th><th class="p-2 text-left">Observação do Preceptor</th></tr></thead><tbody>${tbodyF||'<tr><td colspan="7" class="text-center p-2">Sem registros</td></tr>'}</tbody></table>
+            `;
+            document.getElementById('modal-container').classList.replace('hidden', 'flex');
+        }
+
+        function abrirRelatorioTurma(id) {
+            let turma = turmas.find(t => t.id === id);
+            document.getElementById('modal-titulo').innerText = "Frequência: " + turma.nome;
+            
+            let alunosT = alunos.filter(a => a.turmaId === id).sort((a,b) => a.nome.localeCompare(b.nome));
+            let tbody = '';
+            alunosT.forEach(a => {
+                let fCalc = calcularFrequenciaAluno(a.id); 
+                tbody += `<tr><td class="p-2 border">${a.nome}</td><td class="p-2 border text-center font-bold ${fCalc.percent < 75 ? 'text-red-600' : 'text-blue-700'}">${fCalc.percent}%</td><td class="p-2 border text-center">${fCalc.pres} h</td><td class="p-2 border text-center">${(fCalc.pres/5).toFixed(1)} dias</td></tr>`;
+            });
+            
+            document.getElementById('modal-conteudo').innerHTML = `
+                <div class="mb-6"><h2 class="text-2xl font-bold">${turma.nome} ${turma.status === 'finalizada'?'(Finalizada)':''}</h2></div>
+                <table class="w-full text-sm text-left border">
+                    <thead class="bg-gray-100"><tr><th class="p-2 border">Aluno</th><th class="p-2 border text-center">Freq. Global (%)</th><th class="p-2 border text-center">Presenças (Horas)</th><th class="p-2 border text-center">Dias (Presença/5)</th></tr></thead>
+                    <tbody>${tbody || '<tr><td colspan="4" class="p-4 text-center">Nenhum aluno</td></tr>'}</tbody>
+                </table>
+            `;
+            document.getElementById('modal-container').classList.replace('hidden', 'flex');
+        }
+
+        // ================= GALERIA =================
+        function carregarGaleria() {
+            let gal = JSON.parse(localStorage.getItem('estagio_galeria')) || [];
+            let grid = document.getElementById('grid-galeria');
+            if(gal.length === 0) { grid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-10"><i class="fas fa-camera text-4xl mb-3"></i><p>Nenhuma foto.</p></div>'; return; }
+            grid.innerHTML = gal.sort((a,b) => new Date(b.data) - new Date(a.data)).map(foto => {
+                let t = turmas.find(x => x.id === foto.turmaId); let d = new Date(foto.data);
+                return `<div class="bg-white rounded-lg shadow-sm border flex flex-col">
+                        <img src="${foto.imagem}" class="w-full h-48 object-cover border-b">
+                        <div class="p-4 flex-1 flex flex-col">
+                            <p class="font-bold text-gray-800 text-sm mb-2">${foto.descricao}</p>
+                            <div class="text-xs text-gray-600"><i class="fas fa-users-class w-4"></i> ${t?t.nome:'Geral'}</div>
+                            <div class="text-xs text-gray-600 mt-1"><i class="fas fa-user-md w-4"></i> ${foto.preceptorNome}</div>
+                            <button onclick="apagarFoto('${foto.id}')" class="mt-4 text-red-500 border border-red-200 rounded py-1 hover:bg-red-500 hover:text-white">Apagar</button>
+                        </div></div>`;
+            }).join('');
+        }
+        
+        function apagarFoto(id) {
+            if(confirm('Excluir foto?')) {
+                let gal = JSON.parse(localStorage.getItem('estagio_galeria')) || [];
+                localStorage.setItem('estagio_galeria', JSON.stringify(gal.filter(f => f.id !== id))); carregarGaleria();
+            }
+        }
+
+        // Utils
+        function formatData(d) { if(!d) return ''; let p = d.split('-'); return p.length===3 ? `${p[2]}/${p[1]}/${p[0]}` : d; }
+        function deletar(tipo, id) { 
+            if(confirm("Excluir item permanentemente?")) { 
+                if(tipo==='aluno') alunos=alunos.filter(x=>x.id!==id); 
+                if(tipo==='turma') turmas=turmas.filter(x=>x.id!==id); 
+                if(tipo==='prec') preceptores=preceptores.filter(x=>x.id!==id); 
+                localStorage.setItem('estagio_'+tipo+'s', JSON.stringify(tipo==='aluno'?alunos:(tipo==='turma'?turmas:preceptores))); 
+                init(); showNotification('Excluído com sucesso!');
+            } 
+        }
+
+        // Start
+        init();
+    </script>
+</body>
+</html>
