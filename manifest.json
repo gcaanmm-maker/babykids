@@ -1,0 +1,24 @@
+{
+  "name": "Mundo Kids",
+  "short_name": "Mundo Kids",
+  "description": "Jogos educativos e divertidos para crianças!",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#7048e8",
+  "theme_color": "#7048e8",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "img/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "img/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

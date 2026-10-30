@@ -15,6 +15,11 @@
 
 <title>🌈 Mundo Kids</title>
 
+<!-- Integração PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#7048e8">
+<link rel="apple-touch-icon" href="img/icon-192.png">
+
 <style>
 
 /* =====================================================
@@ -485,6 +490,14 @@ footer {
             <p>Aventura e moedas!</p>
             <span class="abrir">▶ Jogar</span>
         </a>
+		
+		<!-- PINTURA -->
+		<a href="pintura.html" class="card pintura" style="background: #fecfef; color: #c2255c;">
+			<div class="icone">🎨</div>
+			<h2>Pintura</h2>
+			<p>Desenhe e carimbe!</p>
+			<span class="abrir" style="background: #e64980;">▶ Pintar</span>
+		</a>
 
     </section>
 
@@ -494,6 +507,17 @@ footer {
     </footer>
 
 </main>
+
+<!-- Registo do Service Worker para PWA -->
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('Service Worker registado com sucesso!', reg))
+                .catch(err => console.log('Erro ao registar o Service Worker:', err));
+        });
+    }
+</script>
 
 </body>
 
